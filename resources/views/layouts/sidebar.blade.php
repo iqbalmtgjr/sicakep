@@ -47,8 +47,8 @@
                         <!--end:Menu item-->
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->is('home') || request()->is('dashboard') ? 'active' : '' }}"
-                                href="{{ url('home') }}">
+                            <a class="menu-link {{ request()->is('dashboard') || request()->is('dashboard') ? 'active' : '' }}"
+                                href="{{ url('dashboard') }}">
                                 <span class="menu-icon">
                                     <i class="ki-duotone ki-abstract-26 fs-2">
                                         <span class="path1"></span>
@@ -61,8 +61,8 @@
                         </div>
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->is('user-admin') ? 'active' : '' }}"
-                                href="{{ url('user-admin') }}">
+                            <a class="menu-link {{ request()->is('pengguna*') ? 'active' : '' }}"
+                                href="{{ route('pengguna.index') }}">
                                 <span class="menu-icon">
                                     <i class="ki-duotone ki-people fs-2">
                                         <span class="path1"></span>
