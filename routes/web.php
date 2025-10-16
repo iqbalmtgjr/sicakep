@@ -1,8 +1,17 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
+use Laravel\Fortify\Features;
+use App\Livewire\Dashboard;
+use Illuminate\Support\Facades\Route;
+use App\Livewire\Bidang\Index as BidangIndex;
+use App\Livewire\RealisasiKinerja\Verifikasi;
+use App\Livewire\Periode\Index as PeriodeIndex;
+use App\Livewire\Pengguna\Index as PenggunaIndex;
+use App\Livewire\Dashboard\Index as DashboardIndex;
+use App\Livewire\TargetKinerja\Index as TargetIndex;
+use App\Livewire\IndikatorKinerja\Index as IndikatorIndex;
+use App\Livewire\RealisasiKinerja\Index as RealisasiIndex;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -27,12 +36,36 @@ Route::middleware(['auth'])->group(function () {
     //     ->name('two-factor.show');
 
     // dashboard
-    Route::view('dashboard', 'dashboard')
-        ->middleware(['auth', 'verified'])
-        ->name('dashboard');
+    Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
-    // pengguna
-    Route::get('pengguna', \App\Livewire\Pengguna\Index::class)->name('pengguna.index');
+    Route::middleware(['role:admin'])->group(function () {
+        // Pengguna
+        Route::get('pengguna', PenggunaIndex::class)->name('pengguna.index');
+
+        // Bidang
+        Route::get('bidang', BidangIndex::class)->name('bidang.index');
+
+        // Periode
+        Route::get('periode', PeriodeIndex::class)->name('periode.index');
+
+        // Indikator Kinerja
+        Route::get('indikator-kinerja', IndikatorIndex::class)->name('indikator.index');
+
+        // Target Kinerja
+        Route::get('target-kinerja', TargetIndex::class)->name('target.index');
+    });
+
+    // Menu untuk Pegawai & Atasan
+    Route::middleware(['role:pegawai,atasan,admin'])->group(function () {
+        // Realisasi Kinerja
+        Route::get('realisasi-kinerja', RealisasiIndex::class)->name('realisasi.index');
+    });
+
+    // Menu untuk Atasan & Admin (Verifikasi)
+    Route::middleware(['role:atasan,admin'])->group(function () {
+        // Verifikasi Realisasi
+        Route::get('verifikasi-realisasi', Verifikasi::class)->name('verifikasi.index');
+    });
 });
 
 require __DIR__ . '/auth.php';

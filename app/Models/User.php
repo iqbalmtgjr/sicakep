@@ -23,10 +23,11 @@ class User extends Authenticatable
         'name',
         'nip',
         'email',
+        'password',
         'role',
+        'bidang_id',
         'pangkat_golongan',
         'jabatan',
-        'password',
     ];
 
     /**
@@ -64,5 +65,78 @@ class User extends Authenticatable
             ->take(2)
             ->map(fn($word) => Str::substr($word, 0, 1))
             ->implode('');
+    }
+
+    // Relationships
+    public function bidang()
+    {
+        return $this->belongsTo(Bidang::class);
+    }
+
+    public function indikatorKinerja()
+    {
+        return $this->hasMany(IndikatorKinerja::class);
+    }
+
+    public function targetKinerja()
+    {
+        return $this->hasMany(TargetKinerja::class);
+    }
+
+    public function realisasiKinerja()
+    {
+        return $this->hasMany(RealisasiKinerja::class);
+    }
+
+    public function penilaianKinerja()
+    {
+        return $this->hasMany(PenilaianKinerja::class);
+    }
+
+    public function notifikasi()
+    {
+        return $this->hasMany(Notifikasi::class);
+    }
+
+    public function logAktivitas()
+    {
+        return $this->hasMany(LogAktivitas::class);
+    }
+
+    // Scopes
+    public function scopePegawai($query)
+    {
+        return $query->where('role', 'pegawai');
+    }
+
+    public function scopeAtasan($query)
+    {
+        return $query->where('role', 'atasan');
+    }
+
+    public function scopeAdmin($query)
+    {
+        return $query->where('role', 'admin');
+    }
+
+    public function scopeByBidang($query, $bidangId)
+    {
+        return $query->where('bidang_id', $bidangId);
+    }
+
+    // Helper Methods
+    public function isPegawai()
+    {
+        return $this->role === 'pegawai';
+    }
+
+    public function isAtasan()
+    {
+        return $this->role === 'atasan';
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
     }
 }
