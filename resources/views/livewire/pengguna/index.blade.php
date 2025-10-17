@@ -90,6 +90,7 @@
                                             <th>Role</th>
                                             <th>Pangkat/Golongan</th>
                                             <th>Jabatan</th>
+                                            <th>Bidang</th>
                                             <th class="text-end">Aksi</th>
                                         </tr>
                                     </thead>
@@ -113,13 +114,20 @@
                                                 <td>{{ $user->nip }}</td>
                                                 <td>{{ $user->email }}</td>
                                                 <td>
+                                                    @php
+                                                        $roleColors = [
+                                                            'admin' => 'danger',
+                                                            'atasan' => 'warning',
+                                                            'pegawai' => 'info',
+                                                        ];
+                                                    @endphp
                                                     <span
-                                                        class="badge badge-light-{{ $user->role === 'admin' ? 'danger' : 'info' }}">
-                                                        {{ ucfirst($user->role) }}
-                                                    </span>
+                                                        class="badge badge-light-{{ $roleColors[$user->role] ?? 'secondary' }}">
+                                                        {{ ucfirst($user->role) }}</span>
                                                 </td>
                                                 <td>{{ $user->pangkat_golongan ?? '-' }}</td>
                                                 <td>{{ $user->jabatan ?? '-' }}</td>
+                                                <td>{{ $user->bidang->nama_bidang ?? '-' }}</td>
                                                 <td class="text-end">
                                                     <button type="button"
                                                         class="btn btn-sm btn-icon btn-text-secondary rounded-pill"
@@ -144,7 +152,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="7" class="text-center text-muted">Tidak ada data
+                                                <td colspan="8" class="text-center text-muted">Tidak ada data
                                                     pengguna</td>
                                             </tr>
                                         @endforelse
@@ -198,8 +206,9 @@
                             <div class="col-md-6 mb-3">
                                 <label for="role" class="form-label">Role</label>
                                 <select class="form-select" id="role" wire:model="role" required>
-                                    <option value="pegawai">Pegawai</option>
                                     <option value="admin">Admin</option>
+                                    <option value="atasan">Atasan</option>
+                                    <option value="pegawai">Pegawai</option>
                                 </select>
                                 @error('role')
                                     <span class="text-danger">{{ $message }}</span>
@@ -213,6 +222,18 @@
                             <div class="col-md-6 mb-3">
                                 <label for="jabatan" class="form-label">Jabatan</label>
                                 <input type="text" class="form-control" id="jabatan" wire:model="jabatan">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="bidang_id" class="form-label">Bidang</label>
+                                <select class="form-select" id="bidang_id" wire:model="bidang_id">
+                                    <option value="">Pilih Bidang</option>
+                                    @foreach ($bidangs as $bidang)
+                                        <option value="{{ $bidang->id }}">{{ $bidang->nama_bidang }}</option>
+                                    @endforeach
+                                </select>
+                                @error('bidang_id')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         @if (!$editing)

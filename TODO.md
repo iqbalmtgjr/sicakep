@@ -1,8 +1,19 @@
--   [x] Replace the <flux:modal> block with Bootstrap modal HTML structure (modal, modal-dialog, modal-content, etc.)
--   [x] Convert flux:input components to <input class="form-control"> with proper labels
--   [x] Convert flux:select to <select class="form-select">
--   [x] Convert flux:button to <button class="btn btn-primary"> or btn-secondary
--   [x] Update modal close actions to use data-bs-dismiss="modal"
--   [x] Adjust form layout to use Bootstrap grid classes (row, col-md-6)
--   [x] Add JavaScript listeners in the script block for Livewire events to show/hide the modal
--   [x] Ensure all Livewire directives (wire:model, wire:submit) are preserved
+# TODO: Enable Comma as Decimal Separator for Percentage and Numeric Inputs
+
+## Tasks:
+
+-   [x] Update validation rules in PHP controllers for decimal support
+-   [x] Change input type from "number" to "text" in Blade templates
+-   [x] Add JavaScript to convert comma to dot on input/submit
+-   [x] Update placeholders to indicate comma support
+-   [x] Update database schema for bobot field to decimal
+-   [x] Test the changes
+
+## Files to Edit:
+
+-   [x] app/Livewire/IndikatorKinerja/Index.php (validation for bobot)
+-   [x] resources/views/livewire/indikator-kinerja/index.blade.php (input type and JS)
+-   [x] resources/views/livewire/target-kinerja/index.blade.php (input type and JS)
+-   [x] resources/views/livewire/realisasi-kinerja/index.blade.php (input type and JS)
+-   [x] app/Models/IndikatorKinerja.php (cast bobot to decimal)
+-   [x] database/migrations/2025_10_17_034424_change_bobot_to_decimal_in_indikator_kinerja_table.php (migration)

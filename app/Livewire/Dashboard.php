@@ -1,5 +1,4 @@
 <?php
-// File: app/Livewire/Dashboard/Index.php
 
 namespace App\Livewire;
 

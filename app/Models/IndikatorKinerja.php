@@ -14,6 +14,7 @@ class IndikatorKinerja extends Model
     protected $fillable = [
         'user_id',
         'kode_indikator',
+        'sasaran_strategis',
         'nama_indikator',
         'satuan',
         'target',
@@ -24,7 +25,7 @@ class IndikatorKinerja extends Model
 
     protected $casts = [
         'target' => 'decimal:2',
-        'bobot' => 'integer',
+        'bobot' => 'decimal:2',
         'is_active' => 'boolean',
     ];
 

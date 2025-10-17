@@ -54,6 +54,7 @@
                                     <thead>
                                         <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
                                             <th>Kode</th>
+                                            <th>Sasaran Strategis</th>
                                             <th>Nama Indikator</th>
                                             <th>Pegawai</th>
                                             <th>Target</th>
@@ -68,6 +69,10 @@
                                                 <td>
                                                     <span
                                                         class="badge badge-light-primary fs-7">{{ $indikator->kode_indikator }}</span>
+                                                </td>
+                                                <td>
+                                                    <span
+                                                        class="text-gray-800 fw-bold">{{ $indikator->sasaran_strategis }}</span>
                                                 </td>
                                                 <td>
                                                     <div class="d-flex flex-column">
@@ -142,7 +147,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="7" class="text-center text-muted">Tidak ada data
+                                                <td colspan="8" class="text-center text-muted">Tidak ada data
                                                     indikator kinerja</td>
                                             </tr>
                                         @endforelse
@@ -195,6 +200,19 @@
 
                         <div class="row">
                             <div class="col-md-12 mb-3">
+                                <label for="sasaran_strategis" class="form-label">Sasaran Strategis <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="sasaran_strategis"
+                                    wire:model="sasaran_strategis"
+                                    placeholder="Contoh: Meningkatkan produktivitas kerja" required>
+                                @error('sasaran_strategis')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
                                 <label for="nama_indikator" class="form-label">Nama Indikator <span
                                         class="text-danger">*</span></label>
                                 <textarea class="form-control" id="nama_indikator" wire:model="nama_indikator" rows="2"
@@ -209,8 +227,8 @@
                             <div class="col-md-4 mb-3">
                                 <label for="target" class="form-label">Target <span
                                         class="text-danger">*</span></label>
-                                <input type="number" step="0.01" class="form-control" id="target"
-                                    wire:model="target" placeholder="100" required>
+                                <input type="text" class="form-control" id="target" wire:model="target"
+                                    placeholder="100 atau 19,5" required>
                                 @error('target')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -227,8 +245,8 @@
                             <div class="col-md-4 mb-3">
                                 <label for="bobot" class="form-label">Bobot (%) <span
                                         class="text-danger">*</span></label>
-                                <input type="number" class="form-control" id="bobot" wire:model="bobot"
-                                    min="0" max="100" placeholder="20" required>
+                                <input type="text" class="form-control" id="bobot" wire:model="bobot"
+                                    placeholder="20 atau 19,5" required>
                                 @error('bobot')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -294,6 +312,35 @@
 
             Livewire.on('closeModal', () => {
                 $('#indikator-modal').modal('hide');
+            });
+
+            // Function to convert comma to dot for decimal inputs
+            function convertCommaToDot(event) {
+                const input = event.target;
+                const value = input.value;
+                if (value.includes(',')) {
+                    input.value = value.replace(',', '.');
+                }
+            }
+
+            // Add event listeners for decimal inputs
+            document.addEventListener('input', function(event) {
+                if (event.target.id === 'target' || event.target.id === 'bobot') {
+                    convertCommaToDot(event);
+                }
+            });
+
+            // Also handle on form submit
+            document.addEventListener('submit', function(event) {
+                const targetInput = document.getElementById('target');
+                const bobotInput = document.getElementById('bobot');
+
+                if (targetInput && targetInput.value.includes(',')) {
+                    targetInput.value = targetInput.value.replace(',', '.');
+                }
+                if (bobotInput && bobotInput.value.includes(',')) {
+                    bobotInput.value = bobotInput.value.replace(',', '.');
+                }
             });
         });
     </script>

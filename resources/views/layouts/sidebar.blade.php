@@ -59,89 +59,103 @@
                             </a>
                             <!--end:Menu link-->
                         </div>
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->is('pengguna*') ? 'active' : '' }}"
-                                href="{{ route('pengguna.index') }}">
-                                <span class="menu-icon">
-                                    <i class="ki-duotone ki-people fs-2">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                        <span class="path3"></span>
-                                        <span class="path4"></span>
-                                        <span class="path5"></span>
-                                    </i>
-                                </span>
-                                <span class="menu-title">Pegawai</span>
-                            </a>
-                            <!--end:Menu link-->
-                        </div>
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->is('bidang*') ? 'active' : '' }}"
-                                href="{{ route('bidang.index') }}">
-                                <span class="menu-icon">
-                                    <i class="bi bi-award fs-2"></i>
-                                </span>
-                                <span class="menu-title">Bidang</span>
-                            </a>
-                            <!--end:Menu link-->
-                        </div>
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->is('periode*') ? 'active' : '' }}"
-                                href="{{ route('periode.index') }}">
-                                <span class="menu-icon">
-                                    <i class="bi bi-calendar fs-2"></i>
-                                </span>
-                                <span class="menu-title">Periode</span>
-                            </a>
-                            <!--end:Menu link-->
-                        </div>
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->is('indikator*') ? 'active' : '' }}"
-                                href="{{ route('indikator.index') }}">
-                                <span class="menu-icon">
-                                    <i class="bi bi-graph-up fs-2"></i>
-                                </span>
-                                <span class="menu-title">Indikator Kerja</span>
-                            </a>
-                            <!--end:Menu link-->
-                        </div>
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->is('target*') ? 'active' : '' }}"
-                                href="{{ route('target.index') }}">
-                                <span class="menu-icon">
-                                    <i class="bi bi-bullseye fs-2"></i>
-                                </span>
-                                <span class="menu-title">Target Kinerja</span>
-                            </a>
-                            <!--end:Menu link-->
-                        </div>
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->is('realisasi*') ? 'active' : '' }}"
-                                href="{{ route('realisasi.index') }}">
-                                <span class="menu-icon">
-                                    <i class="bi bi-check-circle fs-2"></i>
-                                </span>
-                                <span class="menu-title">Realisasi Kinerja</span>
-                            </a>
-                            <!--end:Menu link-->
-                        </div>
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->is('verifikasi*') ? 'active' : '' }}"
-                                href="{{ route('verifikasi.index') }}">
-                                <span class="menu-icon">
-                                    <i class="bi bi-check fs-2"></i>
-                                </span>
-                                <span class="menu-title">Verifikasi Kinerja</span>
-                            </a>
-                            <!--end:Menu link-->
-                        </div>
+                        @if (auth()->check() && auth()->user()->isAdmin())
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link {{ request()->is('pengguna*') ? 'active' : '' }}"
+                                    href="{{ route('pengguna.index') }}">
+                                    <span class="menu-icon">
+                                        <i class="ki-duotone ki-people fs-2">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                            <span class="path3"></span>
+                                            <span class="path4"></span>
+                                            <span class="path5"></span>
+                                        </i>
+                                    </span>
+                                    <span class="menu-title">Pegawai</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                        @endif
+                        @if (auth()->check() && auth()->user()->isAdmin())
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link {{ request()->is('bidang*') ? 'active' : '' }}"
+                                    href="{{ route('bidang.index') }}">
+                                    <span class="menu-icon">
+                                        <i class="bi bi-award fs-2"></i>
+                                    </span>
+                                    <span class="menu-title">Bidang</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                        @endif
+                        @if (auth()->check() && auth()->user()->isAdmin())
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link {{ request()->is('periode*') ? 'active' : '' }}"
+                                    href="{{ route('periode.index') }}">
+                                    <span class="menu-icon">
+                                        <i class="bi bi-calendar fs-2"></i>
+                                    </span>
+                                    <span class="menu-title">Periode</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                        @endif
+                        @if (auth()->check() && auth()->user()->isAdmin())
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link {{ request()->is('indikator*') ? 'active' : '' }}"
+                                    href="{{ route('indikator.index') }}">
+                                    <span class="menu-icon">
+                                        <i class="bi bi-graph-up fs-2"></i>
+                                    </span>
+                                    <span class="menu-title">Indikator Kerja</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                        @endif
+                        @if (auth()->check() && auth()->user()->isAdmin())
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link {{ request()->is('target*') ? 'active' : '' }}"
+                                    href="{{ route('target.index') }}">
+                                    <span class="menu-icon">
+                                        <i class="bi bi-bullseye fs-2"></i>
+                                    </span>
+                                    <span class="menu-title">Target Kinerja</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                        @endif
+                        @if (auth()->check() && in_array(auth()->user()->role, ['pegawai', 'atasan', 'admin']))
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link {{ request()->is('realisasi*') ? 'active' : '' }}"
+                                    href="{{ route('realisasi.index') }}">
+                                    <span class="menu-icon">
+                                        <i class="bi bi-check-circle fs-2"></i>
+                                    </span>
+                                    <span class="menu-title">Realisasi Kinerja</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                        @endif
+                        @if (auth()->check() && in_array(auth()->user()->role, ['atasan', 'admin']))
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link {{ request()->is('verifikasi*') ? 'active' : '' }}"
+                                    href="{{ route('verifikasi.index') }}">
+                                    <span class="menu-icon">
+                                        <i class="bi bi-check fs-2"></i>
+                                    </span>
+                                    <span class="menu-title">Verifikasi Kinerja</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                        @endif
                     </div>
                     <!--end::Menu-->
                 </div>

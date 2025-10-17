@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Pengguna;
 
+use App\Models\Bidang;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -23,6 +24,7 @@ class Index extends Component
     public $jabatan;
     public $password;
     public $password_confirmation;
+    public $bidang_id;
 
     protected $rules = [
         'name' => 'required|string|max:255',
@@ -32,6 +34,7 @@ class Index extends Component
         'pangkat_golongan' => 'nullable|string|max:255',
         'jabatan' => 'nullable|string|max:255',
         'password' => 'nullable|string|min:8|confirmed',
+        'bidang_id' => 'nullable|exists:bidang,id',
     ];
 
     protected $messages = [
@@ -47,12 +50,14 @@ class Index extends Component
 
     public function render()
     {
-        $users = User::where('name', 'like', '%' . $this->search . '%')
+        $users = User::with('bidang')
+            ->where('name', 'like', '%' . $this->search . '%')
             ->orWhere('nip', 'like', '%' . $this->search . '%')
             ->orWhere('email', 'like', '%' . $this->search . '%')
             ->paginate(10);
+        $bidangs = Bidang::orderBy('nama_bidang')->get();
 
-        return view('livewire.pengguna.index', compact('users'));
+        return view('livewire.pengguna.index', compact('users', 'bidangs'));
     }
 
     public function create()
@@ -73,6 +78,7 @@ class Index extends Component
         $this->role = $user->role;
         $this->pangkat_golongan = $user->pangkat_golongan;
         $this->jabatan = $user->jabatan;
+        $this->bidang_id = $user->bidang_id;
         $this->password = '';
         $this->password_confirmation = '';
         $this->showModal = true;
@@ -90,9 +96,10 @@ class Index extends Component
         // Manual validation
         $this->validate([
             'name' => 'required|string|max:255',
-            'role' => 'required|string|in:admin,pegawai',
+            'role' => 'required|string|in:admin,pegawai,atasan',
             'pangkat_golongan' => 'nullable|string|max:255',
             'jabatan' => 'nullable|string|max:255',
+            'bidang_id' => 'nullable|exists:bidang,id',
         ]);
 
         if ($this->editing) {
@@ -125,6 +132,7 @@ class Index extends Component
                 'role' => $this->role,
                 'pangkat_golongan' => $this->pangkat_golongan,
                 'jabatan' => $this->jabatan,
+                'bidang_id' => $this->bidang_id,
             ]);
 
             if ($this->password) {
@@ -157,6 +165,7 @@ class Index extends Component
                 'role' => $this->role,
                 'pangkat_golongan' => $this->pangkat_golongan,
                 'jabatan' => $this->jabatan,
+                'bidang_id' => $this->bidang_id,
                 'password' => bcrypt($this->password),
             ]);
 
@@ -196,6 +205,7 @@ class Index extends Component
         $this->role = 'pegawai';
         $this->pangkat_golongan = '';
         $this->jabatan = '';
+        $this->bidang_id = null;
         $this->password = '';
         $this->password_confirmation = '';
         $this->resetValidation();

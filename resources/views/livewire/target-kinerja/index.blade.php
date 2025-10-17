@@ -202,7 +202,8 @@
                                     <option value="">Pilih Periode</option>
                                     @foreach ($periodes as $periode)
                                         <option value="{{ $periode->id }}">{{ $periode->nama_periode }}
-                                            ({{ $periode->jenis }})</option>
+                                            ({{ $periode->jenis }})
+                                        </option>
                                     @endforeach
                                 </select>
                                 @error('periode_id')
@@ -240,8 +241,8 @@
                             <div class="col-md-12 mb-3">
                                 <label for="target" class="form-label">Target <span
                                         class="text-danger">*</span></label>
-                                <input type="number" step="0.01" class="form-control" id="target"
-                                    wire:model="target" placeholder="Masukkan nilai target" required>
+                                <input type="text" class="form-control" id="target" wire:model="target"
+                                    placeholder="Masukkan nilai target, contoh: 100 atau 19,5" required>
                                 @error('target')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -295,6 +296,30 @@
 
             Livewire.on('closeModal', () => {
                 $('#target-modal').modal('hide');
+            });
+
+            // Function to convert comma to dot for decimal inputs
+            function convertCommaToDot(event) {
+                const input = event.target;
+                const value = input.value;
+                if (value.includes(',')) {
+                    input.value = value.replace(',', '.');
+                }
+            }
+
+            // Add event listeners for decimal inputs
+            document.addEventListener('input', function(event) {
+                if (event.target.id === 'target') {
+                    convertCommaToDot(event);
+                }
+            });
+
+            // Also handle on form submit
+            document.addEventListener('submit', function(event) {
+                const targetInput = document.getElementById('target');
+                if (targetInput && targetInput.value.includes(',')) {
+                    targetInput.value = targetInput.value.replace(',', '.');
+                }
             });
         });
     </script>

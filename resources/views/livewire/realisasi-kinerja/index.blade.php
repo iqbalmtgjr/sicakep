@@ -254,9 +254,9 @@
                             <div class="col-md-12 mb-3">
                                 <label for="realisasi" class="form-label">Nilai Realisasi <span
                                         class="text-danger">*</span></label>
-                                <input type="number" step="0.01" class="form-control form-control-lg"
-                                    id="realisasi" wire:model="realisasi" placeholder="Masukkan nilai realisasi"
-                                    required>
+                                <input type="text" class="form-control form-control-lg" id="realisasi"
+                                    wire:model="realisasi"
+                                    placeholder="Masukkan nilai realisasi, contoh: 100 atau 19,5" required>
                                 @error('realisasi')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -352,6 +352,30 @@
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
             var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
                 return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+
+            // Function to convert comma to dot for decimal inputs
+            function convertCommaToDot(event) {
+                const input = event.target;
+                const value = input.value;
+                if (value.includes(',')) {
+                    input.value = value.replace(',', '.');
+                }
+            }
+
+            // Add event listeners for decimal inputs
+            document.addEventListener('input', function(event) {
+                if (event.target.id === 'realisasi') {
+                    convertCommaToDot(event);
+                }
+            });
+
+            // Also handle on form submit
+            document.addEventListener('submit', function(event) {
+                const realisasiInput = document.getElementById('realisasi');
+                if (realisasiInput && realisasiInput.value.includes(',')) {
+                    realisasiInput.value = realisasiInput.value.replace(',', '.');
+                }
             });
         });
     </script>

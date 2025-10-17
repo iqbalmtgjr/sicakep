@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama_periode');
             $table->year('tahun');
-            $table->enum('jenis', ['Bulanan', 'Triwulan', 'Semester', 'Tahunan']);
+            $table->string('jenis'); // Menggunakan string untuk fleksibilitas dengan PHP Enum
             $table->date('tanggal_mulai');
             $table->date('tanggal_selesai');
             $table->boolean('is_active')->default(true);
