@@ -5,6 +5,9 @@ namespace App\Livewire\RealisasiKinerja;
 use App\Models\RealisasiKinerja;
 use App\Models\TargetKinerja;
 use App\Models\Periode;
+use App\Models\PenilaianKinerja;
+use App\Models\Notifikasi;
+use App\Models\PenilaianKategori;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -19,6 +22,12 @@ class Index extends Component
     public $showModal = false;
     public $editing = false;
     public $realisasiId;
+
+    // Properti untuk notifikasi penilaian
+    public $notifikasiPenilaian = null;
+
+    // Properti untuk notifikasi verifikasi
+    public $notifikasiVerifikasi = null;
 
     public $target_kinerja_id;
     public $tanggal_realisasi;
@@ -42,6 +51,68 @@ class Index extends Component
         'bukti_file.max' => 'Ukuran file maksimal 2MB.',
         'bukti_file.mimes' => 'File harus berformat: pdf, jpg, jpeg, png, doc, docx.',
     ];
+
+    public function mount()
+    {
+        // Cek apakah ada notifikasi penilaian yang belum dibaca
+        $this->checkNotifikasiPenilaian();
+
+        // Cek apakah ada notifikasi verifikasi yang belum dibaca
+        $this->checkNotifikasiVerifikasi();
+    }
+
+    public function checkNotifikasiPenilaian()
+    {
+        // Ambil notifikasi penilaian yang belum dibaca (tipe = 'penilaian')
+        $this->notifikasiPenilaian = Notifikasi::where('user_id', auth()->id())
+            ->where('tipe', 'penilaian')
+            ->unread()
+            ->latest()
+            ->first();
+    }
+
+    public function dismissNotifikasi($notifikasiId)
+    {
+        $notifikasi = Notifikasi::where('id', $notifikasiId)
+            ->where('user_id', auth()->id())
+            ->first();
+
+        if ($notifikasi) {
+            $notifikasi->markAsRead();
+            $this->notifikasiPenilaian = null;
+            flash('Notifikasi telah ditandai sebagai dibaca.', 'success', [], 'Berhasil');
+        }
+    }
+
+    public function checkNotifikasiVerifikasi()
+    {
+        // Ambil notifikasi verifikasi yang belum dibaca
+        $this->notifikasiVerifikasi = Notifikasi::where('user_id', auth()->id())
+            ->where('tipe', 'verifikasi')
+            ->unread()
+            ->latest()
+            ->first();
+    }
+
+    public function dismissNotifikasiVerifikasi($notifikasiId)
+    {
+        $notifikasi = Notifikasi::where('id', $notifikasiId)
+            ->where('user_id', auth()->id())
+            ->first();
+
+        if ($notifikasi) {
+            $notifikasi->markAsRead();
+            $this->notifikasiVerifikasi = null;
+            flash('Notifikasi telah ditandai sebagai dibaca.', 'success', [], 'Berhasil');
+        }
+    }
+
+    public function getPesanPenilaian($nilai)
+    {
+        return PenilaianKategori::where('min_nilai', '<=', $nilai)
+            ->where('max_nilai', '>=', $nilai)
+            ->first();
+    }
 
     public function updatingSearch()
     {
@@ -108,7 +179,6 @@ class Index extends Component
             ->where('user_id', auth()->id())
             ->firstOrFail();
 
-        // Only allow edit if status is draft or rejected
         if (!in_array($realisasi->status, ['draft', 'rejected'])) {
             flash('Hanya realisasi dengan status Draft atau Ditolak yang dapat diedit.', 'error', [], 'Gagal');
             return;
@@ -138,13 +208,11 @@ class Index extends Component
             'status' => $this->status,
         ];
 
-        // Handle file upload
         if ($this->bukti_file) {
             $filename = time() . '_' . $this->bukti_file->getClientOriginalName();
             $path = $this->bukti_file->storeAs('bukti-realisasi', $filename, 'public');
             $data['bukti_file'] = $path;
 
-            // Delete old file if editing
             if ($this->editing) {
                 $oldRealisasi = RealisasiKinerja::find($this->realisasiId);
                 if ($oldRealisasi && $oldRealisasi->bukti_file) {
@@ -191,13 +259,11 @@ class Index extends Component
             ->where('user_id', auth()->id())
             ->firstOrFail();
 
-        // Only allow delete if status is draft or rejected
         if (!in_array($realisasi->status, ['draft', 'rejected'])) {
             flash('Hanya realisasi dengan status Draft atau Ditolak yang dapat dihapus.', 'error', [], 'Gagal');
             return;
         }
 
-        // Delete file if exists
         if ($realisasi->bukti_file) {
             \Storage::disk('public')->delete($realisasi->bukti_file);
         }

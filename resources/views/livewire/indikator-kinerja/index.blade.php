@@ -58,7 +58,7 @@
                                             <th>Nama Indikator</th>
                                             <th>Pegawai</th>
                                             <th>Target</th>
-                                            <th>Bobot</th>
+                                            {{-- <th>Bobot</th> --}}
                                             <th>Status</th>
                                             <th class="text-end">Aksi</th>
                                         </tr>
@@ -102,13 +102,13 @@
                                                 </td>
                                                 <td>
                                                     <span
-                                                        class="badge badge-light-success">{{ number_format($indikator->target, 0, ',', '.') }}
+                                                        class="badge badge-light-success">{{ number_format($indikator->target, 2, ',', '.') }}
                                                         {{ $indikator->satuan }}</span>
                                                 </td>
-                                                <td>
+                                                {{-- <td>
                                                     <span
                                                         class="badge badge-light-warning">{{ $indikator->bobot }}%</span>
-                                                </td>
+                                                </td> --}}
                                                 <td>
                                                     <div class="form-check form-switch">
                                                         <input class="form-check-input" type="checkbox"
@@ -173,6 +173,53 @@
                 <form wire:submit="save">
                     <div class="modal-body">
                         <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="sasaran_strategis" class="form-label">Sasaran Strategis <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="sasaran_strategis"
+                                    wire:model="sasaran_strategis"
+                                    placeholder="Contoh: Meningkatkan produktivitas kerja" required>
+                                @error('sasaran_strategis')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="nama_indikator" class="form-label">Indikator Sasaran Strategis <span
+                                        class="text-danger">*</span></label>
+                                <textarea class="form-control" id="nama_indikator" wire:model="nama_indikator" rows="2"
+                                    placeholder="Contoh: Jumlah laporan yang diselesaikan" required></textarea>
+                                @error('nama_indikator')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="target" class="form-label">Target <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="target" wire:model="target"
+                                    placeholder="100 atau 19,5" required>
+                                @error('target')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="satuan" class="form-label">Satuan <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="satuan" wire:model="satuan"
+                                    placeholder="Contoh: Dokumen, Kegiatan" required>
+                                @error('satuan')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                        <hr>
+
+                        <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="user_id" class="form-label">Pegawai <span
                                         class="text-danger">*</span></label>
@@ -200,12 +247,12 @@
 
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <label for="sasaran_strategis" class="form-label">Sasaran Strategis <span
+                                <label for="sasaran_program" class="form-label">Sasaran Program <span
                                         class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="sasaran_strategis"
-                                    wire:model="sasaran_strategis"
+                                <input type="text" class="form-control" id="sasaran_program"
+                                    wire:model="sasaran_program"
                                     placeholder="Contoh: Meningkatkan produktivitas kerja" required>
-                                @error('sasaran_strategis')
+                                @error('sasaran_program')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -213,41 +260,11 @@
 
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <label for="nama_indikator" class="form-label">Nama Indikator <span
+                                <label for="indikator_program" class="form-label">Indikator Program <span
                                         class="text-danger">*</span></label>
-                                <textarea class="form-control" id="nama_indikator" wire:model="nama_indikator" rows="2"
+                                <textarea class="form-control" id="indikator_program" wire:model="indikator_program" rows="2"
                                     placeholder="Contoh: Jumlah laporan yang diselesaikan" required></textarea>
-                                @error('nama_indikator')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label for="target" class="form-label">Target <span
-                                        class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="target" wire:model="target"
-                                    placeholder="100 atau 19,5" required>
-                                @error('target')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="satuan" class="form-label">Satuan <span
-                                        class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="satuan" wire:model="satuan"
-                                    placeholder="Contoh: Dokumen, Kegiatan" required>
-                                @error('satuan')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="bobot" class="form-label">Bobot (%) <span
-                                        class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="bobot" wire:model="bobot"
-                                    placeholder="20 atau 19,5" required>
-                                @error('bobot')
+                                @error('indikator_program')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -325,7 +342,7 @@
 
             // Add event listeners for decimal inputs
             document.addEventListener('input', function(event) {
-                if (event.target.id === 'target' || event.target.id === 'bobot') {
+                if (event.target.id === 'target') {
                     convertCommaToDot(event);
                 }
             });
@@ -333,14 +350,14 @@
             // Also handle on form submit
             document.addEventListener('submit', function(event) {
                 const targetInput = document.getElementById('target');
-                const bobotInput = document.getElementById('bobot');
+                // const bobotInput = document.getElementById('bobot');
 
                 if (targetInput && targetInput.value.includes(',')) {
                     targetInput.value = targetInput.value.replace(',', '.');
                 }
-                if (bobotInput && bobotInput.value.includes(',')) {
-                    bobotInput.value = bobotInput.value.replace(',', '.');
-                }
+                // if (bobotInput && bobotInput.value.includes(',')) {
+                //     bobotInput.value = bobotInput.value.replace(',', '.');
+                // }
             });
         });
     </script>

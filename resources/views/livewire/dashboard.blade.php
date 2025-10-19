@@ -15,6 +15,58 @@
     <div id="kt_app_content" class="app-content flex-column-fluid">
         <div id="kt_app_content_container" class="app-container container-fluid">
 
+            @if (auth()->user()->isPegawai() && $notifikasiVerifikasi)
+                @php
+                    // Parse pesan JSON dari notifikasi
+                    $pesanData = json_decode($notifikasiVerifikasi->pesan, true);
+                @endphp
+                <div class="alert alert-dismissible bg-light-{{ $pesanData['status'] == 'verified' ? 'success' : 'danger' }} border border-{{ $pesanData['status'] == 'verified' ? 'success' : 'danger' }} border-dashed d-flex flex-column flex-sm-row w-100 p-5 mb-10 fade show"
+                    wire:transition>
+                    <i
+                        class="ki-duotone {{ $pesanData['status'] == 'verified' ? 'ki-check-circle' : 'ki-cross-circle' }} fs-3x text-{{ $pesanData['status'] == 'verified' ? 'success' : 'danger' }} me-4 mb-5 mb-sm-0">
+                        <span class="path1"></span>
+                        <span class="path2"></span>
+                        <span class="path3"></span>
+                    </i>
+                    <div class="d-flex flex-column pe-0 pe-sm-10">
+                        <h4 class="fw-bold mb-2">{{ $notifikasiVerifikasi->judul }}</h4>
+                        <div class="mb-3">
+                            <span
+                                class="badge badge-{{ $pesanData['status'] == 'verified' ? 'success' : 'danger' }} fs-5 me-2">{{ $pesanData['status'] == 'verified' ? 'Diterima' : 'Ditolak' }}</span>
+                            <span class="badge badge-light-info fs-6 ms-2">{{ $pesanData['tanggal'] ?? '-' }}</span>
+                        </div>
+                        <span class="fs-6 fw-semibold text-gray-700 mb-3">
+                            <strong>Indikator:</strong> {{ $pesanData['indikator'] ?? '-' }}<br>
+                            <strong>Realisasi:</strong>
+                            {{ number_format($pesanData['realisasi'] ?? 0, 2, ',', '.') }}<br>
+                            <strong>Verifikator:</strong> {{ $pesanData['verifikator'] ?? '-' }}
+                        </span>
+                        @if (!empty($pesanData['catatan']))
+                            <div class="alert alert-info p-3 mt-2">
+                                <strong><i class="ki-duotone ki-message-text fs-5 me-1"><span
+                                            class="path1"></span><span class="path2"></span><span
+                                            class="path3"></span></i>Catatan Verifikator:</strong>
+                                <p class="mb-0 mt-2">{{ $pesanData['catatan'] }}</p>
+                            </div>
+                        @endif
+                        <div class="text-muted fs-7 mt-2">
+                            <i class="ki-duotone ki-calendar fs-6 me-1"><span class="path1"></span><span
+                                    class="path2"></span></i>
+                            Diberitahu pada: {{ $notifikasiVerifikasi->created_at->format('d F Y H:i') }}
+                        </div>
+                    </div>
+                    <button type="button"
+                        class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto"
+                        wire:click="dismissNotifikasiVerifikasi({{ $notifikasiVerifikasi->id }})">
+                        <i
+                            class="ki-duotone ki-cross fs-1 text-{{ $pesanData['status'] == 'verified' ? 'success' : 'danger' }}">
+                            <span class="path1"></span>
+                            <span class="path2"></span>
+                        </i>
+                    </button>
+                </div>
+            @endif
+
             @if (auth()->user()->isAdmin())
                 {{-- Dashboard Admin --}}
                 <div class="row g-5 g-xl-10 mb-5">
@@ -122,10 +174,10 @@
                                     @forelse($recentRealisasi as $realisasi)
                                         <tr>
                                             <td>{{ $realisasi->user->name }}</td>
-                                            <td>{{ Str::limit($realisasi->targetKinerja->indikatorKinerja->nama_indikator, 40) }}
+                                            <td>{{ Str::limit($realisasi->targetKinerja->indikatorKinerja->indikator_program, 40) }}
                                             </td>
                                             <td>{{ $realisasi->tanggal_realisasi->format('d/m/Y') }}</td>
-                                            <td>{{ number_format($realisasi->realisasi, 0, ',', '.') }}</td>
+                                            <td>{{ number_format($realisasi->realisasi, 2, ',', '.') }}</td>
                                             <td>
                                                 @php
                                                     $badges = [
@@ -240,10 +292,10 @@
                                     @forelse($recentRealisasi as $realisasi)
                                         <tr>
                                             <td>{{ $realisasi->user->name }}</td>
-                                            <td>{{ Str::limit($realisasi->targetKinerja->indikatorKinerja->nama_indikator, 40) }}
+                                            <td>{{ Str::limit($realisasi->targetKinerja->indikatorKinerja->indikator_program, 40) }}
                                             </td>
                                             <td>{{ $realisasi->tanggal_realisasi->format('d/m/Y') }}</td>
-                                            <td>{{ number_format($realisasi->realisasi, 0, ',', '.') }}</td>
+                                            <td>{{ number_format($realisasi->realisasi, 2, ',', '.') }}</td>
                                         </tr>
                                     @empty
                                         <tr>
@@ -282,12 +334,12 @@
                                         <div>
                                             <span class="text-muted">Target:</span>
                                             <span
-                                                class="fw-bold">{{ number_format($totalTarget, 0, ',', '.') }}</span>
+                                                class="fw-bold">{{ number_format($totalTarget, 2, ',', '.') }}</span>
                                         </div>
                                         <div>
                                             <span class="text-muted">Realisasi:</span>
                                             <span
-                                                class="fw-bold">{{ number_format($totalRealisasi, 0, ',', '.') }}</span>
+                                                class="fw-bold">{{ number_format($totalRealisasi, 2, ',', '.') }}</span>
                                         </div>
                                     </div>
                                 @else
@@ -367,12 +419,12 @@
                                                 <div>
                                                     <span
                                                         class="badge badge-light-primary mb-1">{{ $target->indikatorKinerja->kode_indikator }}</span>
-                                                    <div>{{ $target->indikatorKinerja->nama_indikator }}</div>
+                                                    <div>{{ $target->indikatorKinerja->indikator_program }}</div>
                                                 </div>
                                             </td>
-                                            <td>{{ number_format($target->target, 0, ',', '.') }}
+                                            <td>{{ number_format($target->target, 2, ',', '.') }}
                                                 {{ $target->indikatorKinerja->satuan }}</td>
-                                            <td>{{ number_format($realisasi, 0, ',', '.') }}
+                                            <td>{{ number_format($realisasi, 2, ',', '.') }}
                                                 {{ $target->indikatorKinerja->satuan }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center">

@@ -98,6 +98,85 @@ class User extends Authenticatable
         return $this->hasMany(Notifikasi::class);
     }
 
+    /**
+     * Get unread notifications count
+     */
+    public function unreadNotificationsCount()
+    {
+        return $this->notifikasi()->unread()->count();
+    }
+
+    /**
+     * Get latest unread penilaian notification
+     */
+    public function latestPenilaianNotification()
+    {
+        return $this->notifikasi()
+            ->where('tipe', 'penilaian')
+            ->unread()
+            ->latest()
+            ->first();
+    }
+
+    /**
+     * Mark all notifications as read
+     */
+    public function markAllNotificationsAsRead()
+    {
+        return $this->notifikasi()
+            ->unread()
+            ->update([
+                'is_read' => true,
+                'read_at' => now(),
+            ]);
+    }
+
+    /**
+     * Get notifications by type
+     */
+    public function notificationsByType($type)
+    {
+        return $this->notifikasi()
+            ->where('tipe', $type)
+            ->latest()
+            ->get();
+    }
+
+    /**
+     * Check if user has unread penilaian notification
+     */
+    public function hasUnreadPenilaianNotification()
+    {
+        return $this->notifikasi()
+            ->where('tipe', 'penilaian')
+            ->unread()
+            ->exists();
+    }
+
+    /**
+     * Get notification statistics
+     */
+    public function notificationStats()
+    {
+        return [
+            'total' => $this->notifikasi()->count(),
+            'unread' => $this->notifikasi()->unread()->count(),
+            'penilaian' => $this->notifikasi()->where('tipe', 'penilaian')->count(),
+            'latest' => $this->notifikasi()->latest()->first(),
+        ];
+    }
+
+    /**
+     * Delete old read notifications (older than X days)
+     */
+    public function deleteOldNotifications($days = 90)
+    {
+        return $this->notifikasi()
+            ->read()
+            ->where('read_at', '<', now()->subDays($days))
+            ->delete();
+    }
+
     public function logAktivitas()
     {
         return $this->hasMany(LogAktivitas::class);

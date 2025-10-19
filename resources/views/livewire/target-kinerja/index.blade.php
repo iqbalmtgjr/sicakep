@@ -105,17 +105,17 @@
                                                             <span
                                                                 class="badge badge-light-primary mb-1">{{ $target->indikatorKinerja->kode_indikator }}</span>
                                                             <span
-                                                                class="text-gray-800">{{ Str::limit($target->indikatorKinerja->nama_indikator, 40) }}</span>
+                                                                class="text-gray-800">{{ Str::limit($target->indikatorKinerja->indikator_program, 50) }}</span>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <span
-                                                            class="badge badge-light-info">{{ number_format($target->target, 0, ',', '.') }}
+                                                            class="badge badge-light-info">{{ number_format($target->target, 2, ',', '.') }}
                                                             {{ $target->indikatorKinerja->satuan }}</span>
                                                     </td>
                                                     <td>
                                                         <span
-                                                            class="badge badge-light-{{ $badgeClass }}">{{ number_format($totalRealisasi, 0, ',', '.') }}
+                                                            class="badge badge-light-{{ $badgeClass }}">{{ number_format($totalRealisasi, 2, ',', '.') }}
                                                             {{ $target->indikatorKinerja->satuan }}</span>
                                                     </td>
                                                     <td>
@@ -214,15 +214,15 @@
 
                         <div class="row">
                             <div class="col-md-12 mb-3">
+                                {{-- {{ $indikator_kinerja_id }} --}}
                                 <label for="indikator_kinerja_id" class="form-label">Indikator Kinerja <span
                                         class="text-danger">*</span></label>
-                                <select class="form-select" id="indikator_kinerja_id"
-                                    wire:model="indikator_kinerja_id" required>
+                                <select class="form-select" wire:model.live="indikator_kinerja_id"
+                                    id="indikator_kinerja_id" required>
                                     <option value="">Pilih Indikator</option>
                                     @foreach ($indikators as $indikator)
                                         <option value="{{ $indikator->id }}">
-                                            {{ $indikator->kode_indikator }} - {{ $indikator->nama_indikator }}
-                                            (Target: {{ $indikator->target }} {{ $indikator->satuan }})
+                                            {{ $indikator->kode_indikator }} - {{ $indikator->indikator_program }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -296,6 +296,18 @@
 
             Livewire.on('closeModal', () => {
                 $('#target-modal').modal('hide');
+            });
+
+            // Force set indikator value saat edit
+            Livewire.on('setIndikatorValue', (data) => {
+                setTimeout(() => {
+                    const indikatorSelect = document.getElementById('indikator_kinerja_id');
+                    if (indikatorSelect && data.indikatorId) {
+                        indikatorSelect.value = data.indikatorId;
+                        // Trigger Livewire update
+                        indikatorSelect.dispatchEvent(new Event('change'));
+                    }
+                }, 100);
             });
 
             // Function to convert comma to dot for decimal inputs

@@ -59,8 +59,10 @@ class Index extends Component
 
     public function updatedUserId()
     {
-        // Reset indikator when user changes
-        $this->indikator_kinerja_id = '';
+        // Reset indikator hanya saat create, bukan saat edit
+        if (!$this->editing) {
+            $this->indikator_kinerja_id = '';
+        }
     }
 
     public function render()
@@ -107,15 +109,23 @@ class Index extends Component
     public function edit($id)
     {
         $target = TargetKinerja::findOrFail($id);
+
+        // Set editing flag FIRST
+        $this->editing = true;
         $this->targetId = $id;
+
+        // Set all form data
         $this->user_id = $target->user_id;
         $this->periode_id = $target->periode_id;
         $this->indikator_kinerja_id = $target->indikator_kinerja_id;
         $this->target = $target->target;
         $this->keterangan = $target->keterangan;
+
         $this->showModal = true;
-        $this->editing = true;
+
+        // Dispatch event dengan data untuk force select
         $this->dispatch('showModal');
+        $this->dispatch('setIndikatorValue', indikatorId: $target->indikator_kinerja_id);
     }
 
     public function save()
@@ -207,6 +217,7 @@ class Index extends Component
         $this->indikator_kinerja_id = '';
         $this->target = '';
         $this->keterangan = '';
+        $this->editing = false;
         $this->resetValidation();
         $this->resetErrorBag();
     }

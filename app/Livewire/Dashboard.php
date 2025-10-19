@@ -6,10 +6,43 @@ use App\Models\User;
 use App\Models\Periode;
 use App\Models\RealisasiKinerja;
 use App\Models\TargetKinerja;
+use App\Models\Notifikasi;
 use Livewire\Component;
 
 class Dashboard extends Component
 {
+    public $notifikasiVerifikasi = null;
+
+    public function mount()
+    {
+        if (auth()->user()->isPegawai()) {
+            $this->checkNotifikasiVerifikasi();
+        }
+    }
+
+    public function checkNotifikasiVerifikasi()
+    {
+        // Ambil notifikasi verifikasi yang belum dibaca
+        $this->notifikasiVerifikasi = Notifikasi::where('user_id', auth()->id())
+            ->where('tipe', 'verifikasi')
+            ->unread()
+            ->latest()
+            ->first();
+    }
+
+    public function dismissNotifikasiVerifikasi($notifikasiId)
+    {
+        $notifikasi = Notifikasi::where('id', $notifikasiId)
+            ->where('user_id', auth()->id())
+            ->first();
+
+        if ($notifikasi) {
+            $notifikasi->markAsRead();
+            $this->notifikasiVerifikasi = null;
+            flash('Notifikasi telah ditandai sebagai dibaca.', 'success', [], 'Berhasil');
+        }
+    }
+
     public function render()
     {
         $user = auth()->user();
@@ -68,7 +101,7 @@ class Dashboard extends Component
             ];
 
             foreach ($myTargets as $target) {
-                $chartData['labels'][] = $target->indikatorKinerja->nama_indikator;
+                $chartData['labels'][] = $target->indikatorKinerja->indikator_program;
                 $chartData['series'][] = round($target->getPersentaseCapaian(), 2);
             }
 

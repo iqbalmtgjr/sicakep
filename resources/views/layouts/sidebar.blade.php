@@ -112,7 +112,7 @@
                                     <span class="menu-icon">
                                         <i class="bi bi-graph-up fs-2"></i>
                                     </span>
-                                    <span class="menu-title">Indikator Kerja</span>
+                                    <span class="menu-title">Indikator Kinerja</span>
                                 </a>
                                 <!--end:Menu link-->
                             </div>
@@ -130,7 +130,7 @@
                                 <!--end:Menu link-->
                             </div>
                         @endif
-                        @if (auth()->check() && in_array(auth()->user()->role, ['pegawai', 'atasan', 'admin']))
+                        @if (auth()->check() && in_array(auth()->user()->role, ['pegawai']))
                             <div class="menu-item">
                                 <!--begin:Menu link-->
                                 <a class="menu-link {{ request()->is('realisasi*') ? 'active' : '' }}"
@@ -139,6 +139,22 @@
                                         <i class="bi bi-check-circle fs-2"></i>
                                     </span>
                                     <span class="menu-title">Realisasi Kinerja</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                        @endif
+                        @if (auth()->check() && in_array(auth()->user()->role, ['pegawai', 'atasan', 'admin']))
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link {{ request()->is('notifikasi-penilaian*') ? 'active' : '' }}"
+                                    href="{{ route('notifikasi.penilaian.index') }}">
+                                    <span class="menu-icon">
+                                        <i class="ki-duotone ki-notification-bing fs-2">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                        </i>
+                                    </span>
+                                    <span class="menu-title">Notifikasi Penilaian</span>
                                 </a>
                                 <!--end:Menu link-->
                             </div>

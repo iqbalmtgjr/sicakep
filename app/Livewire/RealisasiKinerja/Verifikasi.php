@@ -4,6 +4,7 @@ namespace App\Livewire\RealisasiKinerja;
 
 use App\Models\RealisasiKinerja;
 use App\Models\Periode;
+use App\Models\Notifikasi;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -83,6 +84,22 @@ class Verifikasi extends Component
             'catatan_verifikasi' => $this->catatan_verifikasi,
         ]);
 
+        // Buat notifikasi untuk user yang mengajukan realisasi
+        Notifikasi::create([
+            'user_id' => $realisasi->user_id,
+            'judul' => 'Realisasi Kinerja Diterima',
+            'pesan' => json_encode([
+                'status' => 'verified',
+                'indikator' => $realisasi->targetKinerja->indikatorKinerja->nama_indikator,
+                'realisasi' => $realisasi->realisasi,
+                'tanggal' => $realisasi->tanggal_realisasi->format('d F Y'),
+                'verifikator' => auth()->user()->name,
+                'catatan' => $this->catatan_verifikasi ?: null,
+            ]),
+            'tipe' => 'verifikasi',
+            'is_read' => false,
+        ]);
+
         flash('Realisasi berhasil diverifikasi.', 'success', [], 'Berhasil');
         $this->closeModal();
     }
@@ -101,6 +118,22 @@ class Verifikasi extends Component
             'verified_by' => auth()->id(),
             'verified_at' => now(),
             'catatan_verifikasi' => $this->catatan_verifikasi,
+        ]);
+
+        // Buat notifikasi untuk user yang mengajukan realisasi
+        Notifikasi::create([
+            'user_id' => $realisasi->user_id,
+            'judul' => 'Realisasi Kinerja Ditolak',
+            'pesan' => json_encode([
+                'status' => 'rejected',
+                'indikator' => $realisasi->targetKinerja->indikatorKinerja->nama_indikator,
+                'realisasi' => $realisasi->realisasi,
+                'tanggal' => $realisasi->tanggal_realisasi->format('d F Y'),
+                'verifikator' => auth()->user()->name,
+                'catatan' => $this->catatan_verifikasi,
+            ]),
+            'tipe' => 'verifikasi',
+            'is_read' => false,
         ]);
 
         flash('Realisasi ditolak.', 'warning', [], 'Informasi');

@@ -16,16 +16,18 @@ class IndikatorKinerja extends Model
         'kode_indikator',
         'sasaran_strategis',
         'nama_indikator',
+        'sasaran_program',
+        'indikator_program',
         'satuan',
         'target',
-        'bobot',
+        // 'bobot',
         'deskripsi',
         'is_active',
     ];
 
     protected $casts = [
         'target' => 'decimal:2',
-        'bobot' => 'decimal:2',
+        // 'bobot' => 'decimal:2',
         'is_active' => 'boolean',
     ];
 

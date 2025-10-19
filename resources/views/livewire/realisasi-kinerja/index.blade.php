@@ -16,6 +16,117 @@
     <div id="kt_app_content" class="app-content flex-column-fluid">
         <div id="kt_app_content_container" class="app-container container-fluid">
             <div class="col-12">
+                <!-- Alert Notifikasi Penilaian dari Database -->
+                @if ($notifikasiPenilaian)
+                    @php
+                        // Parse pesan JSON dari notifikasi
+                        $pesanData = json_decode($notifikasiPenilaian->pesan, true);
+                        $nilai = $pesanData['nilai'] ?? 0;
+                        $kategoriData = $this->getPesanPenilaian($nilai);
+                    @endphp
+                    <div class="alert alert-dismissible bg-light-{{ $kategoriData['badge'] }} border border-{{ $kategoriData['badge'] }} border-dashed d-flex flex-column flex-sm-row w-100 p-5 mb-10 fade show"
+                        wire:transition>
+                        <i
+                            class="ki-duotone {{ $kategoriData['icon'] }} fs-3x text-{{ $kategoriData['badge'] }} me-4 mb-5 mb-sm-0">
+                            <span class="path1"></span>
+                            <span class="path2"></span>
+                            <span class="path3"></span>
+                        </i>
+                        <div class="d-flex flex-column pe-0 pe-sm-10">
+                            <h4 class="fw-bold mb-2">{{ $notifikasiPenilaian->judul }}</h4>
+                            <div class="mb-3">
+                                <span
+                                    class="badge badge-{{ $kategoriData['badge'] }} fs-5 me-2">{{ $kategoriData['kategori'] }}</span>
+                                <span class="badge badge-light-{{ $kategoriData['badge'] }} fs-5">Nilai:
+                                    {{ number_format($nilai, 2) }}</span>
+                                <span class="badge badge-light-info fs-6 ms-2">{{ $pesanData['periode'] ?? '-' }}</span>
+                            </div>
+                            <span class="fs-6 fw-semibold text-gray-700 mb-3">
+                                <strong>{{ $kategoriData['kategori'] }}:</strong> {{ $kategoriData['pesan'] }}
+                            </span>
+                            @if (!empty($pesanData['catatan']))
+                                <div class="alert alert-info p-3 mt-2">
+                                    <strong><i class="ki-duotone ki-message-text fs-5 me-1"><span
+                                                class="path1"></span><span class="path2"></span><span
+                                                class="path3"></span></i>Catatan Penilai:</strong>
+                                    <p class="mb-0 mt-2">{{ $pesanData['catatan'] }}</p>
+                                </div>
+                            @endif
+                            <div class="text-muted fs-7 mt-2">
+                                <i class="ki-duotone ki-calendar fs-6 me-1"><span class="path1"></span><span
+                                        class="path2"></span></i>
+                                Dinilai pada:
+                                {{ $pesanData['tanggal'] ?? $notifikasiPenilaian->created_at->format('d F Y') }}
+                                @if (!empty($pesanData['penilai']))
+                                    oleh {{ $pesanData['penilai'] }}
+                                @endif
+                            </div>
+                        </div>
+                        <button type="button"
+                            class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto"
+                            wire:click="dismissNotifikasi({{ $notifikasiPenilaian->id }})">
+                            <i class="ki-duotone ki-cross fs-1 text-{{ $kategoriData['badge'] }}">
+                                <span class="path1"></span>
+                                <span class="path2"></span>
+                            </i>
+                        </button>
+                    </div>
+                @endif
+
+                <!-- Alert Notifikasi Verifikasi -->
+                @if ($notifikasiVerifikasi)
+                    @php
+                        // Parse pesan JSON dari notifikasi
+                        $pesanData = json_decode($notifikasiVerifikasi->pesan, true);
+                    @endphp
+                    <div class="alert alert-dismissible bg-light-{{ $pesanData['status'] == 'verified' ? 'success' : 'danger' }} border border-{{ $pesanData['status'] == 'verified' ? 'success' : 'danger' }} border-dashed d-flex flex-column flex-sm-row w-100 p-5 mb-10 fade show"
+                        wire:transition>
+                        <i
+                            class="ki-duotone {{ $pesanData['status'] == 'verified' ? 'ki-check-circle' : 'ki-cross-circle' }} fs-3x text-{{ $pesanData['status'] == 'verified' ? 'success' : 'danger' }} me-4 mb-5 mb-sm-0">
+                            <span class="path1"></span>
+                            <span class="path2"></span>
+                            <span class="path3"></span>
+                        </i>
+                        <div class="d-flex flex-column pe-0 pe-sm-10">
+                            <h4 class="fw-bold mb-2">{{ $notifikasiVerifikasi->judul }}</h4>
+                            <div class="mb-3">
+                                <span
+                                    class="badge badge-{{ $pesanData['status'] == 'verified' ? 'success' : 'danger' }} fs-5 me-2">{{ $pesanData['status'] == 'verified' ? 'Diterima' : 'Ditolak' }}</span>
+                                <span
+                                    class="badge badge-light-info fs-6 ms-2">{{ $pesanData['tanggal'] ?? '-' }}</span>
+                            </div>
+                            <span class="fs-6 fw-semibold text-gray-700 mb-3">
+                                <strong>Indikator:</strong> {{ $pesanData['indikator'] ?? '-' }}<br>
+                                <strong>Realisasi:</strong>
+                                {{ number_format($pesanData['realisasi'] ?? 0, 2, ',', '.') }}<br>
+                                <strong>Verifikator:</strong> {{ $pesanData['verifikator'] ?? '-' }}
+                            </span>
+                            @if (!empty($pesanData['catatan']))
+                                <div class="alert alert-info p-3 mt-2">
+                                    <strong><i class="ki-duotone ki-message-text fs-5 me-1"><span
+                                                class="path1"></span><span class="path2"></span><span
+                                                class="path3"></span></i>Catatan Verifikator:</strong>
+                                    <p class="mb-0 mt-2">{{ $pesanData['catatan'] }}</p>
+                                </div>
+                            @endif
+                            <div class="text-muted fs-7 mt-2">
+                                <i class="ki-duotone ki-calendar fs-6 me-1"><span class="path1"></span><span
+                                        class="path2"></span></i>
+                                Diberitahu pada: {{ $notifikasiVerifikasi->created_at->format('d F Y H:i') }}
+                            </div>
+                        </div>
+                        <button type="button"
+                            class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto"
+                            wire:click="dismissNotifikasiVerifikasi({{ $notifikasiVerifikasi->id }})">
+                            <i
+                                class="ki-duotone ki-cross fs-1 text-{{ $pesanData['status'] == 'verified' ? 'success' : 'danger' }}">
+                                <span class="path1"></span>
+                                <span class="path2"></span>
+                            </i>
+                        </button>
+                    </div>
+                @endif
+
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
@@ -96,12 +207,12 @@
                                                     </td>
                                                     <td>
                                                         <span
-                                                            class="badge badge-light-info">{{ number_format($target->target, 0, ',', '.') }}
+                                                            class="badge badge-light-info">{{ number_format($target->target, 2, ',', '.') }}
                                                             {{ $indikator->satuan }}</span>
                                                     </td>
                                                     <td>
                                                         <span
-                                                            class="badge badge-light-success">{{ number_format($realisasi->realisasi, 0, ',', '.') }}
+                                                            class="badge badge-light-success">{{ number_format($realisasi->realisasi, 2, ',', '.') }}
                                                             {{ $indikator->satuan }}</span>
                                                     </td>
                                                     <td>
@@ -146,7 +257,8 @@
                                                         @if (in_array($realisasi->status, ['draft', 'rejected']))
                                                             <button type="button"
                                                                 class="btn btn-sm btn-icon btn-text-secondary rounded-pill"
-                                                                wire:click="edit({{ $realisasi->id }})" title="Edit">
+                                                                wire:click="edit({{ $realisasi->id }})"
+                                                                title="Edit">
                                                                 <i class="ki-duotone ki-pencil fs-2">
                                                                     <span class="path1"></span>
                                                                     <span class="path2"></span>
@@ -171,7 +283,8 @@
                                                 <tr>
                                                     <td colspan="7" class="text-center text-muted">
                                                         <div class="py-10">
-                                                            <i class="ki-duotone ki-file-deleted fs-5x text-muted mb-5">
+                                                            <i
+                                                                class="ki-duotone ki-file-deleted fs-5x text-muted mb-5">
                                                                 <span class="path1"></span>
                                                                 <span class="path2"></span>
                                                             </i>
@@ -194,7 +307,7 @@
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal Input/Edit Realisasi -->
     <div wire:ignore.self class="modal fade" id="realisasi-modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -227,7 +340,7 @@
                                     @foreach ($targets as $target)
                                         <option value="{{ $target->id }}">
                                             {{ $target->periode->nama_periode }} -
-                                            {{ $target->indikatorKinerja->nama_indikator }}
+                                            {{ $target->indikatorKinerja->indikator_program }}
                                             (Target: {{ $target->target }} {{ $target->indikatorKinerja->satuan }})
                                         </option>
                                     @endforeach

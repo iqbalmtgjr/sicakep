@@ -57,7 +57,7 @@ class PenilaianKinerja extends Model
             return 'Sangat Baik';
         } elseif ($persentase >= 76) {
             return 'Baik';
-        } elseif ($persentase >= 60) {
+        } elseif ($persentase >= 61) {
             return 'Cukup';
         } else {
             return 'Kurang';

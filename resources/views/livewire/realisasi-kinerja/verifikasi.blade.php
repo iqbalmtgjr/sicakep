@@ -108,17 +108,17 @@
                                                             <span
                                                                 class="text-gray-800 fw-bold mb-1">{{ $indikator->kode_indikator }}</span>
                                                             <span
-                                                                class="text-muted fs-7">{{ Str::limit($indikator->nama_indikator, 40) }}</span>
+                                                                class="text-muted fs-7">{{ Str::limit($indikator->indikator_program, 40) }}</span>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <span
-                                                            class="badge badge-light-info">{{ number_format($target->target, 0, ',', '.') }}
+                                                            class="badge badge-light-info">{{ number_format($target->target, 2, ',', '.') }}
                                                             {{ $indikator->satuan }}</span>
                                                     </td>
                                                     <td>
                                                         <span
-                                                            class="badge badge-light-success">{{ number_format($realisasi->realisasi, 0, ',', '.') }}
+                                                            class="badge badge-light-success">{{ number_format($realisasi->realisasi, 2, ',', '.') }}
                                                             {{ $indikator->satuan }}</span>
                                                     </td>
                                                     <td>

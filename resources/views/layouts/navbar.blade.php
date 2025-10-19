@@ -85,12 +85,218 @@
                         <!--end::Menu wrapper-->
                         <!--begin::Navbar-->
                         <div class="app-navbar flex-shrink-0">
+                            <!--begin::Notifications-->
+                            @if (auth()->check() && auth()->user()->isPegawai())
+                                @php
+                                    $notifikasiUnread = \App\Models\Notifikasi::where('user_id', auth()->id())
+                                        ->unread()
+                                        ->count();
+                                @endphp
+                                @if ($notifikasiUnread > 0)
+                                    <div class="app-navbar-item ms-1 ms-md-4">
+                                        <div class="btn btn-icon btn-active-color-primary position-relative"
+                                            data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
+                                            data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
+                                            <i class="ki-duotone ki-notification-on fs-2">
+                                                <span class="path1"></span>
+                                                <span class="path2"></span>
+                                            </i>
+                                            <span
+                                                class="bullet bullet-dot bg-danger h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink"></span>
+                                        </div>
+                                        <!--begin::Menu-->
+                                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-400px"
+                                            data-kt-menu="true">
+                                            <!--begin::Heading-->
+                                            <div class="menu-item px-3">
+                                                <div class="menu-content d-flex align-items-center px-3">
+                                                    <span
+                                                        class="badge badge-light-danger fs-7 px-2 py-1">{{ $notifikasiUnread }}</span>
+                                                    <span class="fs-6 fw-bold text-gray-900 ms-2">Notifikasi Baru</span>
+                                                </div>
+                                            </div>
+                                            <!--end::Heading-->
+                                            <!--begin::Menu separator-->
+                                            <div class="separator my-2"></div>
+                                            <!--end::Menu separator-->
+                                            @php
+                                                $recentNotifikasi = \App\Models\Notifikasi::where(
+                                                    'user_id',
+                                                    auth()->id(),
+                                                )
+                                                    ->latest()
+                                                    ->take(5)
+                                                    ->get();
+                                            @endphp
+                                            @forelse($recentNotifikasi as $notif)
+                                                @php
+                                                    $pesanData = json_decode($notif->pesan, true);
+                                                @endphp
+                                                <div class="menu-item px-5">
+                                                    <a href="#" class="menu-link px-5">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="symbol symbol-40px me-4">
+                                                                @if ($notif->tipe == 'verifikasi')
+                                                                    <span
+                                                                        class="symbol-label bg-light-{{ $pesanData['status'] == 'verified' ? 'success' : 'danger' }}">
+                                                                        <i
+                                                                            class="ki-duotone {{ $pesanData['status'] == 'verified' ? 'ki-check-circle' : 'ki-cross-circle' }} fs-2 text-{{ $pesanData['status'] == 'verified' ? 'success' : 'danger' }}">
+                                                                            <span class="path1"></span>
+                                                                            <span class="path2"></span>
+                                                                        </i>
+                                                                    </span>
+                                                                @else
+                                                                    <span class="symbol-label bg-light-info">
+                                                                        <i
+                                                                            class="ki-duotone ki-information fs-2 text-info">
+                                                                            <span class="path1"></span>
+                                                                            <span class="path2"></span>
+                                                                        </i>
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+                                                            <div class="d-flex flex-column">
+                                                                <div class="fw-bold text-gray-900">
+                                                                    {{ Str::limit($notif->judul, 30) }}</div>
+                                                                <div class="text-muted fs-7">
+                                                                    {{ $notif->created_at->diffForHumans() }}</div>
+                                                                @if (!$notif->is_read)
+                                                                    <span class="badge badge-dot bg-danger mt-1"></span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            @empty
+                                                <div class="menu-item px-5">
+                                                    <span class="menu-link px-5 text-muted">Tidak ada notifikasi</span>
+                                                </div>
+                                            @endforelse
+                                            <!--begin::Menu separator-->
+                                            <div class="separator my-2"></div>
+                                            <!--end::Menu separator-->
+                                            <div class="menu-item px-5">
+                                                <a href="{{ route('realisasi.index') }}"
+                                                    class="menu-link px-5 text-primary">
+                                                    Lihat Semua Notifikasi
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <!--end::Menu-->
+                                    </div>
+                                @endif
+                            @else
+                                @php
+                                    $notifikasiUnread = \App\Models\Notifikasi::where(
+                                        'judul',
+                                        'Realisasi Kinerja Menunggu Verifikasi',
+                                    )
+                                        ->unread()
+                                        ->count();
+                                @endphp
+                                @if ($notifikasiUnread > 0)
+                                    <div class="app-navbar-item ms-1 ms-md-4">
+                                        <div class="btn btn-icon btn-active-color-primary position-relative"
+                                            data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
+                                            data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
+                                            <i class="ki-duotone ki-notification-on fs-2">
+                                                <span class="path1"></span>
+                                                <span class="path2"></span>
+                                            </i>
+                                            <span
+                                                class="bullet bullet-dot bg-danger h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink"></span>
+                                        </div>
+                                        <!--begin::Menu-->
+                                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-400px"
+                                            data-kt-menu="true">
+                                            <!--begin::Heading-->
+                                            <div class="menu-item px-3">
+                                                <div class="menu-content d-flex align-items-center px-3">
+                                                    <span
+                                                        class="badge badge-light-danger fs-7 px-2 py-1">{{ $notifikasiUnread }}</span>
+                                                    <span class="fs-6 fw-bold text-gray-900 ms-2">Notifikasi
+                                                        Baru</span>
+                                                </div>
+                                            </div>
+                                            <!--end::Heading-->
+                                            <!--begin::Menu separator-->
+                                            <div class="separator my-2"></div>
+                                            <!--end::Menu separator-->
+                                            @php
+                                                $recentNotifikasi = \App\Models\Notifikasi::where(
+                                                    'judul',
+                                                    'Realisasi Kinerja Menunggu Verifikasi',
+                                                )
+                                                    ->latest()
+                                                    ->take(5)
+                                                    ->get();
+                                            @endphp
+                                            @forelse($recentNotifikasi as $notif)
+                                                @php
+                                                    $pesanData = json_decode($notif->pesan, true);
+                                                @endphp
+                                                <div class="menu-item px-5">
+                                                    <a href="{{ url('verifikasi-realisasi') }}"
+                                                        class="menu-link px-5">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="symbol symbol-40px me-4">
+                                                                @if ($notif->tipe == 'verifikasi')
+                                                                    <span class="symbol-label bg-light-success">
+                                                                        <i
+                                                                            class="ki-duotone ki-check-circle fs-2 text-success }}">
+                                                                            <span class="path1"></span>
+                                                                            <span class="path2"></span>
+                                                                        </i>
+                                                                    </span>
+                                                                @else
+                                                                    <span class="symbol-label bg-light-info">
+                                                                        <i
+                                                                            class="ki-duotone ki-information fs-2 text-info">
+                                                                            <span class="path1"></span>
+                                                                            <span class="path2"></span>
+                                                                        </i>
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+                                                            <div class="d-flex flex-column">
+                                                                <div class="fw-bold text-gray-900">
+                                                                    {{ Str::limit($notif->judul, 30) }}</div>
+                                                                <div class="text-muted fs-7">
+                                                                    {{ $notif->created_at->diffForHumans() }}</div>
+                                                                @if (!$notif->is_read)
+                                                                    <span
+                                                                        class="badge badge-dot bg-danger mt-1"></span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            @empty
+                                                <div class="menu-item px-5">
+                                                    <span class="menu-link px-5 text-muted">Tidak ada notifikasi</span>
+                                                </div>
+                                            @endforelse
+                                            <!--begin::Menu separator-->
+                                            <div class="separator my-2"></div>
+                                            <!--end::Menu separator-->
+                                            <div class="menu-item px-5">
+                                                <a href="{{ route('realisasi.index') }}"
+                                                    class="menu-link px-5 text-primary">
+                                                    Lihat Semua Notifikasi
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <!--end::Menu-->
+                                    </div>
+                                @endif
+                            @endif
+                            <!--end::Notifications-->
                             <!--begin::User menu-->
                             <div class="app-navbar-item ms-1 ms-md-4" id="kt_header_user_menu_toggle">
                                 <!--begin::Menu wrapper-->
                                 <div class="cursor-pointer symbol symbol-35px"
-                                    data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent"
-                                    data-kt-menu-placement="bottom-end">
+                                    data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
+                                    data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
                                     <img src="{{ asset('/logo.png') }}" class="rounded-3" alt="user" />
                                 </div>
                                 <!--begin::User account menu-->

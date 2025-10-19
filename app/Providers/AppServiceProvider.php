@@ -3,6 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Models\PenilaianKinerja;
+use App\Models\RealisasiKinerja;
+use App\Observers\PenilaianKinerjaObserver;
+use App\Observers\RealisasiKinerjaObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Register PenilaianKinerja Observer
+        PenilaianKinerja::observe(PenilaianKinerjaObserver::class);
+
+        // Register RealisasiKinerja Observer
+        RealisasiKinerja::observe(RealisasiKinerjaObserver::class);
     }
 }

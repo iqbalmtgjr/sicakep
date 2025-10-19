@@ -22,9 +22,11 @@ class Index extends Component
     public $kode_indikator;
     public $sasaran_strategis;
     public $nama_indikator;
+    public $sasaran_program;
+    public $indikator_program;
     public $satuan;
     public $target;
-    public $bobot;
+    // public $bobot;
     public $deskripsi;
     public $is_active = true;
 
@@ -33,9 +35,11 @@ class Index extends Component
         'kode_indikator' => 'required|string|max:50|unique:indikator_kinerja,kode_indikator',
         'sasaran_strategis' => 'required|string|max:255',
         'nama_indikator' => 'required|string',
+        'sasaran_program' => 'required|string|max:255',
+        'indikator_program' => 'required|string',
         'satuan' => 'required|string|max:50',
         'target' => 'required|numeric|min:0',
-        'bobot' => 'required|numeric|min:0|max:100',
+        // 'bobot' => 'required|numeric|min:0|max:100',
         'deskripsi' => 'nullable|string',
         'is_active' => 'boolean',
     ];
@@ -46,10 +50,12 @@ class Index extends Component
         'kode_indikator.unique' => 'Kode indikator sudah digunakan.',
         'sasaran_strategis.required' => 'Sasaran strategis wajib diisi.',
         'nama_indikator.required' => 'Nama indikator wajib diisi.',
+        'sasaran_program.required' => 'Sasaran program wajib diisi.',
+        'indikator_program.required' => 'Indikator program wajib diisi.',
         'satuan.required' => 'Satuan wajib diisi.',
         'target.required' => 'Target wajib diisi.',
-        'bobot.required' => 'Bobot wajib diisi.',
-        'bobot.max' => 'Bobot maksimal 100.',
+        // 'bobot.required' => 'Bobot wajib diisi.',
+        // 'bobot.max' => 'Bobot maksimal 100.',
     ];
 
     public function updatingSearch()
@@ -98,9 +104,11 @@ class Index extends Component
         $this->kode_indikator = $indikator->kode_indikator;
         $this->sasaran_strategis = $indikator->sasaran_strategis;
         $this->nama_indikator = $indikator->nama_indikator;
+        $this->sasaran_program = $indikator->sasaran_program;
+        $this->indikator_program = $indikator->indikator_program;
         $this->satuan = $indikator->satuan;
         $this->target = $indikator->target;
-        $this->bobot = $indikator->bobot;
+        // $this->bobot = $indikator->bobot;
         $this->deskripsi = $indikator->deskripsi;
         $this->is_active = $indikator->is_active;
         $this->showModal = true;
@@ -124,9 +132,11 @@ class Index extends Component
                 'kode_indikator' => 'required|string|max:50',
                 'sasaran_strategis' => 'required|string|max:255',
                 'nama_indikator' => 'required|string',
+                'sasaran_program' => 'required|string|max:255',
+                'indikator_program' => 'required|string',
                 'satuan' => 'required|string|max:50',
                 'target' => 'required|numeric|min:0',
-                'bobot' => 'required|numeric|min:0|max:100',
+                // 'bobot' => 'required|numeric|min:0|max:100',
                 'deskripsi' => 'nullable|string',
                 'is_active' => 'boolean',
             ]);
@@ -136,9 +146,11 @@ class Index extends Component
                 'kode_indikator' => $this->kode_indikator,
                 'sasaran_strategis' => $this->sasaran_strategis,
                 'nama_indikator' => $this->nama_indikator,
+                'sasaran_program' => $this->sasaran_program,
+                'indikator_program' => $this->indikator_program,
                 'satuan' => $this->satuan,
                 'target' => $this->target,
-                'bobot' => $this->bobot,
+                // 'bobot' => $this->bobot,
                 'deskripsi' => $this->deskripsi,
                 'is_active' => $this->is_active,
             ]);
@@ -157,11 +169,13 @@ class Index extends Component
                 'kode_indikator' => $this->kode_indikator,
                 'sasaran_strategis' => $this->sasaran_strategis,
                 'nama_indikator' => $this->nama_indikator,
+                'sasaran_program' => $this->sasaran_program,
+                'indikator_program' => $this->indikator_program,
                 'satuan' => $this->satuan,
                 'target' => $this->target,
-                'bobot' => $this->bobot,
                 'deskripsi' => $this->deskripsi,
                 'is_active' => $this->is_active,
+                // 'bobot' => $this->bobot,
             ]);
 
             flash('Indikator kinerja berhasil ditambahkan.', 'success', [], 'Berhasil');
@@ -213,9 +227,11 @@ class Index extends Component
         $this->kode_indikator = '';
         $this->sasaran_strategis = '';
         $this->nama_indikator = '';
+        $this->sasaran_program = '';
+        $this->indikator_program = '';
         $this->satuan = '';
         $this->target = '';
-        $this->bobot = '';
+        // $this->bobot = '';
         $this->deskripsi = '';
         $this->is_active = true;
         $this->resetValidation();
