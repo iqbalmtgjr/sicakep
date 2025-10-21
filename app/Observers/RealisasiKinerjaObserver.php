@@ -34,6 +34,7 @@ class RealisasiKinerjaObserver
     {
         $userId = $realisasi->user_id;
         $periodeId = $realisasi->targetKinerja->periode_id;
+        $targetKinerjaId = $realisasi->target_kinerja_id;
 
         // Hitung total realisasi dan target untuk periode ini
         $totalRealisasi = RealisasiKinerja::where('user_id', $userId)
@@ -71,12 +72,13 @@ class RealisasiKinerjaObserver
         $data = [
             'user_id' => $userId,
             'periode_id' => $periodeId,
+            'target_kinerja_id' => $targetKinerjaId,
             'nilai_kinerja' => $nilaiKinerja,
             'persentase_capaian' => $persentaseCapaian,
             'predikat' => $predikat,
             'tanggal_penilaian' => now(),
             'dinilai_oleh' => auth()->id() ?? 1, // Atasan/admin yang memverifikasi (fallback ke ID 1 jika null)
-            'catatan' => 'Penilaian otomatis berdasarkan verifikasi realisasi kinerja',
+            'catatan' => $kategori ? $kategori->catatan : 'Tidak Ada Catatan',
         ];
 
         if ($penilaian) {

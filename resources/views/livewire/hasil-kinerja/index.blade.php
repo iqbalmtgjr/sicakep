@@ -6,7 +6,7 @@
                 <h1 class="page-heading d-flex flex-column justify-content-center text-dark fw-bold fs-3 m-0">
                     Hasil Kinerja
                 </h1>
-                <span class="text-muted fs-6">Kelola notifikasi penilaian kinerja Anda</span>
+                <span class="text-muted fs-6">Hasil kinerja pegawai</span>
             </div>
         </div>
     </div>
@@ -75,7 +75,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header border-0 pt-6">
-                                <div class="card-title">
+                                {{-- <div class="card-title">
                                     <div class="d-flex align-items-center gap-3">
                                         <select class="form-select form-select-solid w-150px"
                                             wire:model.live="filterStatus">
@@ -84,7 +84,7 @@
                                             <option value="read">Sudah Dibaca</option>
                                         </select>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <div class="card-toolbar">
                                     <div class="d-flex justify-content-end">
@@ -96,7 +96,7 @@
                                                 </i>
                                             </span>
                                             <input type="text" class="form-control form-control-solid"
-                                                placeholder="Cari notifikasi..."
+                                                placeholder="Cari hasil kinerja..."
                                                 wire:model.live.debounce.300ms="search">
                                         </div>
                                     </div>
@@ -108,30 +108,29 @@
                                     <table class="table align-middle table-row-dashed fs-6 gy-5">
                                         <thead>
                                             <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-                                                <th>Judul</th>
-                                                <th>Kategori</th>
-                                                <th>Nilai</th>
                                                 <th>Periode</th>
+                                                <th>Nilai</th>
+                                                <th>Kategori</th>
+                                                <th>Pesan</th>
+                                                <th>Dinilai oleh</th>
                                                 <th>Tanggal</th>
-                                                <th>Status</th>
                                                 <th class="text-end">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody class="text-gray-600 fw-semibold">
-                                            @forelse($notifikasis as $notifikasi)
+                                            @forelse($datas as $data)
                                                 @php
-                                                    $pesanData = json_decode($notifikasi->pesan, true);
-                                                    $nilai = $pesanData['nilai'] ?? 0;
+                                                    $nilai = $data->nilai_kinerja ?? 0;
                                                     $kategoriData = $this->getPesanPenilaian($nilai);
                                                 @endphp
                                                 <tr>
                                                     <td>
-                                                        <div class="d-flex flex-column">
-                                                            <span
-                                                                class="text-gray-800 fw-bold mb-1">{{ $notifikasi->judul }}</span>
-                                                            <span
-                                                                class="text-muted fs-7">{{ Str::limit($pesanData['predikat'] ?? '-', 40) }}</span>
-                                                        </div>
+                                                        <span
+                                                            class="badge badge-light-info">{{ $data->periode->nama_periode ?? '-' }}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span
+                                                            class="badge badge-light-primary">{{ number_format($nilai, 2) }}</span>
                                                     </td>
                                                     <td>
                                                         @if ($kategoriData)
@@ -141,44 +140,22 @@
                                                             <span class="badge badge-secondary">-</span>
                                                         @endif
                                                     </td>
-                                                    <td>
-                                                        <span
-                                                            class="badge badge-light-primary">{{ number_format($nilai, 2) }}</span>
-                                                    </td>
-                                                    <td>
-                                                        <span
-                                                            class="badge badge-light-info">{{ $pesanData['periode'] ?? '-' }}</span>
-                                                    </td>
-                                                    <td>{{ $notifikasi->created_at->format('d/m/Y H:i') }}</td>
-                                                    <td>
-                                                        @if ($notifikasi->is_read)
-                                                            <span class="badge badge-success">Dibaca</span>
-                                                        @else
-                                                            <span class="badge badge-warning">Belum Dibaca</span>
-                                                        @endif
-                                                    </td>
+                                                    <td>{{ $kategoriData->pesan }}</td>
+                                                    <td>{{ $data->penilai->name }} ({{ $data->penilai->role }})</td>
+                                                    <td>{{ $data->created_at->format('d/m/Y H:i') }}</td>
                                                     <td class="text-end">
-                                                        @if (!$notifikasi->is_read)
-                                                            <button type="button"
-                                                                class="btn btn-sm btn-icon btn-text-success rounded-pill"
-                                                                wire:click="markAsRead({{ $notifikasi->id }})"
-                                                                title="Tandai Dibaca">
-                                                                <i class="ki-duotone ki-eye fs-2">
-                                                                    <span class="path1"></span>
-                                                                    <span class="path2"></span>
-                                                                </i>
-                                                            </button>
-                                                        @else
-                                                            <button type="button"
-                                                                class="btn btn-sm btn-icon btn-text-warning rounded-pill"
-                                                                wire:click="markAsUnread({{ $notifikasi->id }})"
-                                                                title="Tandai Belum Dibaca">
-                                                                <i class="ki-duotone ki-eye-slash fs-2">
-                                                                    <span class="path1"></span>
-                                                                    <span class="path2"></span>
-                                                                </i>
-                                                            </button>
-                                                        @endif
+                                                        <button type="button"
+                                                            class="btn btn-lg btn-icon btn-text-success rounded-pill"
+                                                            wire:click="exportPdf({{ $data->id }})"
+                                                            title="Export PDF">
+                                                            <i class="ki-duotone ki-printer">
+                                                                <span class="path1"></span>
+                                                                <span class="path2"></span>
+                                                                <span class="path3"></span>
+                                                                <span class="path4"></span>
+                                                                <span class="path5"></span>
+                                                            </i>
+                                                        </button>
                                                     </td>
                                                 </tr>
                                             @empty
@@ -190,8 +167,8 @@
                                                                 <span class="path1"></span>
                                                                 <span class="path2"></span>
                                                             </i>
-                                                            <p class="fs-5 fw-bold">Belum ada notifikasi penilaian</p>
-                                                            <p class="text-muted">Notifikasi penilaian akan muncul
+                                                            <p class="fs-5 fw-bold">Belum ada hasil kinerja</p>
+                                                            <p class="text-muted">Hasil kinerja akan muncul
                                                                 setelah atasan melakukan penilaian</p>
                                                         </div>
                                                     </td>
@@ -200,7 +177,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                {{ $notifikasis->links() }}
+                                {{ $datas->links() }}
                             </div>
                         </div>
                     </div>

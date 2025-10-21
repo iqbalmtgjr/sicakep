@@ -14,6 +14,7 @@ class PenilaianKinerja extends Model
     protected $fillable = [
         'user_id',
         'periode_id',
+        'target_kinerja_id',
         'total_realisasi',
         'total_target',
         'persentase_capaian',

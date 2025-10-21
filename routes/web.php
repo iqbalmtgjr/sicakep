@@ -13,6 +13,7 @@ use App\Livewire\TargetKinerja\Index as TargetIndex;
 use App\Livewire\IndikatorKinerja\Index as IndikatorIndex;
 use App\Livewire\RealisasiKinerja\Index as RealisasiIndex;
 use App\Livewire\Notifikasi\Penilaian\Index as NotifikasiPenilaianIndex;
+use App\Livewire\HasilKinerja\Index as HasilKinerjaIndex;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -63,6 +64,8 @@ Route::middleware(['auth'])->group(function () {
 
         // Notifikasi Penilaian
         Route::get('notifikasi-penilaian', NotifikasiPenilaianIndex::class)->name('notifikasi.penilaian.index');
+
+        Route::get('hasil-kinerja', HasilKinerjaIndex::class)->name('hasil.index');
     });
 
     // Menu untuk Atasan & Admin (Verifikasi)

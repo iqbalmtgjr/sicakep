@@ -175,12 +175,12 @@
                                             <!--begin::Menu separator-->
                                             <div class="separator my-2"></div>
                                             <!--end::Menu separator-->
-                                            <div class="menu-item px-5">
+                                            {{-- <div class="menu-item px-5">
                                                 <a href="{{ route('realisasi.index') }}"
                                                     class="menu-link px-5 text-primary">
                                                     Lihat Semua Notifikasi
                                                 </a>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                         <!--end::Menu-->
                                     </div>
@@ -279,12 +279,12 @@
                                             <!--begin::Menu separator-->
                                             <div class="separator my-2"></div>
                                             <!--end::Menu separator-->
-                                            <div class="menu-item px-5">
+                                            {{-- <div class="menu-item px-5">
                                                 <a href="{{ route('realisasi.index') }}"
                                                     class="menu-link px-5 text-primary">
                                                     Lihat Semua Notifikasi
                                                 </a>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                         <!--end::Menu-->
                                     </div>

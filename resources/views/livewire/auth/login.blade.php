@@ -14,8 +14,8 @@ use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
 
 new #[Layout('components.layouts.auth')] class extends Component {
-    #[Validate('required|string|email')]
-    public string $email = '';
+    #[Validate('required|string|exists:users,nip')]
+    public string $nip = '';
 
     #[Validate('required|string')]
     public string $password = '';
@@ -57,13 +57,13 @@ new #[Layout('components.layouts.auth')] class extends Component {
      */
     protected function validateCredentials(): User
     {
-        $user = Auth::getProvider()->retrieveByCredentials(['email' => $this->email, 'password' => $this->password]);
+        $user = Auth::getProvider()->retrieveByCredentials(['nip' => $this->nip, 'password' => $this->password]);
 
         if (!$user || !Auth::getProvider()->validateCredentials($user, ['password' => $this->password])) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => __('auth.failed'),
+                'nip' => __('auth.failed'),
             ]);
         }
 
@@ -84,7 +84,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'email' => __('auth.throttle', [
+            'nip' => __('auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),
@@ -96,7 +96,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
      */
     protected function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->email) . '|' . request()->ip());
+        return Str::transliterate(Str::lower($this->nip) . '|' . request()->ip());
     }
 }; ?>
 
@@ -116,9 +116,9 @@ new #[Layout('components.layouts.auth')] class extends Component {
     <!--begin::Input group=-->
     <div class="fv-row mb-8">
         <!--begin::Email-->
-        <input type="text" placeholder="Email" wire:model="email" autocomplete="off"
-            class="form-control bg-transparent @error('email') is-invalid @enderror" />
-        @error('email')
+        <input type="number" placeholder="NIP" wire:model="nip" autocomplete="off"
+            class="form-control bg-transparent @error('nip') is-invalid @enderror" />
+        @error('nip')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
             </span>

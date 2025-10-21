@@ -146,15 +146,12 @@
                         @if (auth()->check() && in_array(auth()->user()->role, ['pegawai', 'atasan', 'admin']))
                             <div class="menu-item">
                                 <!--begin:Menu link-->
-                                <a class="menu-link {{ request()->is('notifikasi-penilaian*') ? 'active' : '' }}"
-                                    href="{{ route('notifikasi.penilaian.index') }}">
+                                <a class="menu-link {{ request()->is('hasil-kinerja*') ? 'active' : '' }}"
+                                    href="{{ route('hasil.index') }}">
                                     <span class="menu-icon">
-                                        <i class="ki-duotone ki-notification-bing fs-2">
-                                            <span class="path1"></span>
-                                            <span class="path2"></span>
-                                        </i>
+                                        <i class="bi bi-award fs-2"></i>
                                     </span>
-                                    <span class="menu-title">Notifikasi Penilaian</span>
+                                    <span class="menu-title">Hasil Kinerja</span>
                                 </a>
                                 <!--end:Menu link-->
                             </div>

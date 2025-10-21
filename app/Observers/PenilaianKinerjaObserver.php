@@ -12,7 +12,7 @@ class PenilaianKinerjaObserver
      */
     public function created(PenilaianKinerja $penilaian): void
     {
-        $this->createNotification($penilaian);
+        // $this->createNotification($penilaian);
     }
 
     /**
@@ -22,7 +22,7 @@ class PenilaianKinerjaObserver
     {
         // Jika penilaian diupdate, buat notifikasi baru
         // Atau update notifikasi yang ada (tergantung kebutuhan)
-        $this->createNotification($penilaian, true);
+        // $this->createNotification($penilaian, true);
     }
 
     /**
