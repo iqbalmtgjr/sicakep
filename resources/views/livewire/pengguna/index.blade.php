@@ -80,85 +80,90 @@
                             <div class="card-body py-4">
                                 <!--begin::Wrapper-->
                                 <!--begin::Datatable-->
-                                <table id="kt_datatable_example_1"
-                                    class="table align-middle table-row-dashed fs-6 gy-5">
-                                    <thead>
-                                        <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-                                            <th>Nama</th>
-                                            <th>NIP</th>
-                                            <th>Email</th>
-                                            <th>Role</th>
-                                            <th>Pangkat/Golongan</th>
-                                            <th>Jabatan</th>
-                                            <th>Bidang</th>
-                                            <th class="text-end">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="text-gray-600 fw-semibold">
-                                        @forelse($users as $index => $user)
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div
-                                                            class="symbol symbol-circle symbol-50px overflow-hidden me-3">
-                                                            <div class="symbol-label fs-3 bg-light-danger text-danger">
-                                                                {{ $user->initials() }}
+                                <div class="table-responsive">
+                                    <table id="kt_datatable_example_1"
+                                        class="table align-middle table-row-dashed fs-6 gy-5">
+                                        <thead>
+                                            <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+                                                <th>Nama</th>
+                                                <th>NIP</th>
+                                                <th>Email</th>
+                                                <th>Role</th>
+                                                <th>Pangkat/Golongan</th>
+                                                <th>Jabatan</th>
+                                                <th>Bidang</th>
+                                                <th class="text-end">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="text-gray-600 fw-semibold">
+                                            @forelse($users as $index => $user)
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <div
+                                                                class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+                                                                <div
+                                                                    class="symbol-label fs-3 bg-light-danger text-danger">
+                                                                    {{ $user->initials() }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex flex-column">
+                                                                <a href="#"
+                                                                    class="text-gray-800 text-hover-primary mb-1">{{ $user->name }}</a>
                                                             </div>
                                                         </div>
-                                                        <div class="d-flex flex-column">
-                                                            <a href="#"
-                                                                class="text-gray-800 text-hover-primary mb-1">{{ $user->name }}</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>{{ $user->nip }}</td>
-                                                <td>{{ $user->email }}</td>
-                                                <td>
-                                                    @php
-                                                        $roleColors = [
-                                                            'admin' => 'danger',
-                                                            'atasan' => 'warning',
-                                                            'pegawai' => 'info',
-                                                        ];
-                                                    @endphp
-                                                    <span
-                                                        class="badge badge-light-{{ $roleColors[$user->role] ?? 'secondary' }}">
-                                                        {{ ucfirst($user->role) }}</span>
-                                                </td>
-                                                <td>{{ $user->pangkat_golongan ?? '-' }}</td>
-                                                <td>{{ $user->jabatan ?? '-' }}</td>
-                                                <td>{{ $user->bidang->nama_bidang ?? '-' }}</td>
-                                                <td class="text-end">
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-icon btn-text-secondary rounded-pill"
-                                                        wire:click="edit({{ $user->id }})" title="Edit">
-                                                        <i class="ki-duotone ki-pencil fs-2">
-                                                            <span class="path1"></span>
-                                                            <span class="path2"></span>
-                                                        </i>
-                                                    </button>
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-icon btn-text-secondary rounded-pill"
-                                                        wire:click="confirmDelete({{ $user->id }})" title="Hapus">
-                                                        <i class="ki-duotone ki-trash fs-2">
-                                                            <span class="path1"></span>
-                                                            <span class="path2"></span>
-                                                            <span class="path3"></span>
-                                                            <span class="path4"></span>
-                                                            <span class="path5"></span>
-                                                        </i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="8" class="text-center text-muted">Tidak ada data
-                                                    pengguna</td>
-                                            </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
-                                {{ $users->links() }}
+                                                    </td>
+                                                    <td>{{ $user->nip }}</td>
+                                                    <td>{{ $user->email }}</td>
+                                                    <td>
+                                                        @php
+                                                            $roleColors = [
+                                                                'admin' => 'danger',
+                                                                'atasan' => 'warning',
+                                                                'pegawai' => 'info',
+                                                            ];
+                                                        @endphp
+                                                        <span
+                                                            class="badge badge-light-{{ $roleColors[$user->role] ?? 'secondary' }}">
+                                                            {{ ucfirst($user->role) }}</span>
+                                                    </td>
+                                                    <td>{{ $user->pangkat_golongan ?? '-' }}</td>
+                                                    <td>{{ $user->jabatan ?? '-' }}</td>
+                                                    <td>{{ $user->bidang->nama_bidang ?? '-' }}</td>
+                                                    <td class="text-end">
+                                                        <button type="button"
+                                                            class="btn btn-sm btn-icon btn-text-secondary rounded-pill"
+                                                            wire:click="edit({{ $user->id }})" title="Edit">
+                                                            <i class="ki-duotone ki-pencil fs-2">
+                                                                <span class="path1"></span>
+                                                                <span class="path2"></span>
+                                                            </i>
+                                                        </button>
+                                                        <button type="button"
+                                                            class="btn btn-sm btn-icon btn-text-secondary rounded-pill"
+                                                            wire:click="confirmDelete({{ $user->id }})"
+                                                            title="Hapus">
+                                                            <i class="ki-duotone ki-trash fs-2">
+                                                                <span class="path1"></span>
+                                                                <span class="path2"></span>
+                                                                <span class="path3"></span>
+                                                                <span class="path4"></span>
+                                                                <span class="path5"></span>
+                                                            </i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="8" class="text-center text-muted">Tidak ada data
+                                                        pengguna</td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                    {{ $users->links() }}
+                                </div>
+
                             </div>
                         </div>
                     </div>
