@@ -25,7 +25,7 @@ class UserFactory extends Factory
     {
         return [
             'name' => "Muhammad Iqbal",
-            'nip' => fake()->unique()->numerify('19900101####'),
+            'nip' => "123123123",
             'email' => "iqbalmtgjr@gmail.com",
             'role' => 'admin',
             'pangkat_golongan' => fake()->optional()->randomElement(['III/a', 'III/b', 'III/c', 'IV/a']),
