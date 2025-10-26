@@ -1,4 +1,3 @@
-<!-- File: resources/views/livewire/indikator-kinerja/index.blade.php -->
 <div>
     <div id="kt_app_toolbar" class="app-toolbar pt-7 pt-lg-10 pb-4">
         <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex align-items-stretch">
@@ -223,7 +222,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="user_id" class="form-label">Pegawai <span
                                         class="text-danger">*</span></label>
-                                <select class="form-select" id="user_id" wire:model="user_id" required>
+                                <select class="form-select" id="user_id" wire:model.live="user_id" required>
                                     <option value="">Pilih Pegawai</option>
                                     @foreach ($users as $user)
                                         <option value="{{ $user->id }}">{{ $user->name }} -
@@ -303,7 +302,9 @@
             </div>
         </div>
     </div>
-
+    <!-- Select2 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         document.addEventListener('livewire:initialized', () => {
             Livewire.on('confirm-delete', (data) => {
@@ -358,6 +359,25 @@
                 // if (bobotInput && bobotInput.value.includes(',')) {
                 //     bobotInput.value = bobotInput.value.replace(',', '.');
                 // }
+            });
+
+            // Initialize Select2 only for pegawai filter
+            function initializeSelect2() {
+                $('.select2-pegawai').select2({
+                    placeholder: 'Semua Pegawai',
+                    allowClear: true,
+                    width: '100%'
+                });
+            }
+
+            // Initialize on page load
+            initializeSelect2();
+
+            // Re-initialize after Livewire updates
+            Livewire.on('showModal', () => {
+                setTimeout(() => {
+                    initializeSelect2();
+                }, 100);
             });
         });
     </script>

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('nip')->unique();
             $table->string('email')->unique();
-            $table->enum('role', ['admin', 'pegawai', 'atasan']);
+            $table->enum('role', ['admin', 'kepala_dinas', 'pegawai', 'atasan']);
             $table->string('pangkat_golongan')->nullable();
             $table->string('jabatan')->nullable();
             $table->timestamp('email_verified_at')->nullable();

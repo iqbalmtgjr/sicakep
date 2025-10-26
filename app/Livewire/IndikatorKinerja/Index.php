@@ -1,5 +1,4 @@
 <?php
-// File: app/Livewire/IndikatorKinerja/Index.php
 
 namespace App\Livewire\IndikatorKinerja;
 

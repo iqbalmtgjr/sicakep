@@ -95,13 +95,30 @@ class RealisasiKinerjaObserver
      */
     private function notifyAtasanAdmin(RealisasiKinerja $realisasi): void
     {
-        // Ambil semua user dengan role atasan atau admin
-        $atasanAdminUsers = User::whereIn('role', ['atasan', 'admin'])->get();
+        // UPDATED: Notifikasi ke atasan langsung dan kepala dinas
+        $userIds = [];
 
-        // Siapkan data untuk pesan notifikasi
+        // 1. Atasan langsung
+        if ($realisasi->user->atasan_id) {
+            $userIds[] = $realisasi->user->atasan_id;
+        }
+
+        // 2. Kepala Dinas (jika bukan atasan langsung)
+        $kepalaDinas = User::where('level_jabatan', 'kepala_dinas')->first();
+        if ($kepalaDinas && !in_array($kepalaDinas->id, $userIds)) {
+            $userIds[] = $kepalaDinas->id;
+        }
+
+        // 3. Admin
+        $admins = User::where('role', 'admin')->pluck('id')->toArray();
+        $userIds = array_merge($userIds, $admins);
+
+        $userIds = array_unique($userIds);
+
         $pesanData = [
             'realisasi_id' => $realisasi->id,
             'user_name' => $realisasi->user->name,
+            'user_nip' => $realisasi->user->nip,
             'indikator' => $realisasi->targetKinerja->indikatorKinerja->nama_indikator,
             'periode' => $realisasi->targetKinerja->periode->nama_periode,
             'realisasi' => $realisasi->realisasi,
@@ -109,13 +126,11 @@ class RealisasiKinerjaObserver
             'keterangan' => $realisasi->keterangan,
         ];
 
-        // Judul notifikasi
         $judul = "Realisasi Kinerja Menunggu Verifikasi";
 
-        // Buat notifikasi untuk setiap atasan/admin
-        foreach ($atasanAdminUsers as $user) {
+        foreach ($userIds as $userId) {
             Notifikasi::create([
-                'user_id' => $user->id,
+                'user_id' => $userId,
                 'judul' => $judul,
                 'pesan' => json_encode($pesanData),
                 'tipe' => 'verifikasi',

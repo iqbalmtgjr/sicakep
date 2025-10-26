@@ -43,6 +43,21 @@ class Verifikasi extends Component
             'verifiedBy'
         ]);
 
+        // FILTER BERDASARKAN HAK AKSES
+        $user = auth()->user();
+
+        if ($user->isKepalaDinas()) {
+            // Kepala Dinas bisa lihat semua
+            // No filter needed
+        } elseif ($user->isAdmin()) {
+            // Admin juga bisa lihat semua
+            // No filter needed
+        } else {
+            // Atasan hanya bisa lihat realisasi bawahannya
+            $bawahanIds = $user->bawahan()->pluck('id')->toArray();
+            $query->whereIn('user_id', $bawahanIds);
+        }
+
         if ($this->filterPeriode) {
             $query->whereHas('targetKinerja', function ($q) {
                 $q->where('periode_id', $this->filterPeriode);
@@ -65,17 +80,16 @@ class Verifikasi extends Component
         return view('livewire.realisasi-kinerja.verifikasi', compact('realisasis', 'periodes'));
     }
 
-    public function showVerifyModal($id)
-    {
-        $this->realisasiId = $id;
-        $this->catatan_verifikasi = '';
-        $this->showModal = true;
-        $this->dispatch('showModal');
-    }
-
     public function verify()
     {
         $realisasi = RealisasiKinerja::findOrFail($this->realisasiId);
+
+        // VALIDASI: Hanya atasan langsung atau kepala dinas yang bisa verifikasi
+        if (!auth()->user()->canAssess($realisasi->user_id)) {
+            flash('Anda tidak memiliki hak untuk memverifikasi realisasi ini.', 'error', [], 'Gagal');
+            $this->closeModal();
+            return;
+        }
 
         $realisasi->update([
             'status' => 'verified',
@@ -84,7 +98,6 @@ class Verifikasi extends Component
             'catatan_verifikasi' => $this->catatan_verifikasi,
         ]);
 
-        // Buat notifikasi untuk user yang mengajukan realisasi
         Notifikasi::create([
             'user_id' => $realisasi->user_id,
             'judul' => 'Realisasi Kinerja Diterima',
@@ -103,6 +116,45 @@ class Verifikasi extends Component
         flash('Realisasi berhasil diverifikasi.', 'success', [], 'Berhasil');
         $this->closeModal();
     }
+
+    public function showVerifyModal($id)
+    {
+        $this->realisasiId = $id;
+        $this->catatan_verifikasi = '';
+        $this->showModal = true;
+        $this->dispatch('showModal');
+    }
+
+    // public function verify()
+    // {
+    //     $realisasi = RealisasiKinerja::findOrFail($this->realisasiId);
+
+    //     $realisasi->update([
+    //         'status' => 'verified',
+    //         'verified_by' => auth()->id(),
+    //         'verified_at' => now(),
+    //         'catatan_verifikasi' => $this->catatan_verifikasi,
+    //     ]);
+
+    //     // Buat notifikasi untuk user yang mengajukan realisasi
+    //     Notifikasi::create([
+    //         'user_id' => $realisasi->user_id,
+    //         'judul' => 'Realisasi Kinerja Diterima',
+    //         'pesan' => json_encode([
+    //             'status' => 'verified',
+    //             'indikator' => $realisasi->targetKinerja->indikatorKinerja->nama_indikator,
+    //             'realisasi' => $realisasi->realisasi,
+    //             'tanggal' => $realisasi->tanggal_realisasi->format('d F Y'),
+    //             'verifikator' => auth()->user()->name,
+    //             'catatan' => $this->catatan_verifikasi ?: null,
+    //         ]),
+    //         'tipe' => 'verifikasi',
+    //         'is_read' => false,
+    //     ]);
+
+    //     flash('Realisasi berhasil diverifikasi.', 'success', [], 'Berhasil');
+    //     $this->closeModal();
+    // }
 
     public function reject()
     {

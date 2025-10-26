@@ -89,6 +89,8 @@
                                                 <th>NIP</th>
                                                 <th>Email</th>
                                                 <th>Role</th>
+                                                <th>Level Jabatan</th> <!-- TAMBAHAN -->
+                                                <th>Atasan Langsung</th> <!-- TAMBAHAN -->
                                                 <th>Pangkat/Golongan</th>
                                                 <th>Jabatan</th>
                                                 <th>Bidang</th>
@@ -126,6 +128,31 @@
                                                         <span
                                                             class="badge badge-light-{{ $roleColors[$user->role] ?? 'secondary' }}">
                                                             {{ ucfirst($user->role) }}</span>
+                                                    </td>
+                                                    <td>
+                                                        @if ($user->level_jabatan)
+                                                            <span class="badge badge-light-primary">
+                                                                {{ ucfirst(str_replace('_', ' ', $user->level_jabatan)) }}
+                                                            </span>
+                                                        @else
+                                                            <span class="text-muted">-</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if ($user->atasan)
+                                                            <div class="d-flex align-items-center">
+                                                                <div
+                                                                    class="symbol symbol-circle symbol-25px overflow-hidden me-2">
+                                                                    <div
+                                                                        class="symbol-label fs-8 bg-light-success text-success">
+                                                                        {{ $user->atasan->initials() }}
+                                                                    </div>
+                                                                </div>
+                                                                <span>{{ $user->atasan->name }}</span>
+                                                            </div>
+                                                        @else
+                                                            <span class="text-muted">-</span>
+                                                        @endif
                                                     </td>
                                                     <td>{{ $user->pangkat_golongan ?? '-' }}</td>
                                                     <td>{{ $user->jabatan ?? '-' }}</td>
@@ -188,7 +215,8 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="name" class="form-label">Nama</label>
-                                <input type="text" class="form-control" id="name" wire:model="name" required>
+                                <input type="text" class="form-control" id="name" wire:model="name"
+                                    required>
                                 @error('name')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -218,6 +246,39 @@
                                 @error('role')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="level_jabatan" class="form-label">Level Jabatan</label>
+                                    <select class="form-select" id="level_jabatan" wire:model="level_jabatan">
+                                        <option value="">Pilih Level Jabatan</option>
+                                        <option value="kepala_dinas">Kepala Dinas</option>
+                                        <option value="sekretaris">Sekretaris</option>
+                                        <option value="kasubbag">Kasubbag</option>
+                                        <option value="kabid">Kepala Bidang</option>
+                                        <option value="kepala_upt">Kepala UPT</option>
+                                        <option value="kasubag_upt">Kasubbag UPT</option>
+                                        <option value="staff">Staff/Pelaksana</option>
+                                    </select>
+                                    @error('level_jabatan')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="atasan_id" class="form-label">Atasan Langsung</label>
+                                    <select class="form-select" id="atasan_id" wire:model="atasan_id">
+                                        <option value="">Pilih Atasan</option>
+                                        @foreach ($atasans as $atasan)
+                                            <option value="{{ $atasan->id }}">
+                                                {{ $atasan->name }} - {{ $atasan->jabatan }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('atasan_id')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="pangkat_golongan" class="form-label">Pangkat/Golongan</label>

@@ -14,6 +14,8 @@ use App\Livewire\IndikatorKinerja\Index as IndikatorIndex;
 use App\Livewire\RealisasiKinerja\Index as RealisasiIndex;
 use App\Livewire\Notifikasi\Penilaian\Index as NotifikasiPenilaianIndex;
 use App\Livewire\HasilKinerja\Index as HasilKinerjaIndex;
+use App\Livewire\Laporan\HierarkiKinerja;
+
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -72,6 +74,11 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:atasan,admin'])->group(function () {
         // Verifikasi Realisasi
         Route::get('verifikasi-realisasi', Verifikasi::class)->name('verifikasi.index');
+    });
+
+    Route::middleware(['auth', 'role:admin,atasan'])->group(function () {
+        // Laporan Hierarki
+        Route::get('laporan/hierarki-kinerja', HierarkiKinerja::class)->name('laporan.hierarki');
     });
 });
 

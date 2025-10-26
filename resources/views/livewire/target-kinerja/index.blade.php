@@ -1,4 +1,3 @@
-<!-- File: resources/views/livewire/target-kinerja/index.blade.php -->
 <div>
     <div id="kt_app_toolbar" class="app-toolbar pt-7 pt-lg-10 pb-4">
         <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex align-items-stretch">
@@ -29,7 +28,7 @@
                                                 </option>
                                             @endforeach
                                         </select>
-                                        <select class="form-select form-select-solid w-200px"
+                                        <select class="form-select form-select-solid w-200px select2-pegawai"
                                             wire:model.live="filterUser">
                                             <option value="">Semua Pegawai</option>
                                             @foreach ($users as $user)
@@ -271,6 +270,10 @@
         </div>
     </div>
 
+    <!-- Select2 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <script>
         document.addEventListener('livewire:initialized', () => {
             Livewire.on('confirm-delete', (data) => {
@@ -307,6 +310,39 @@
                         // Trigger Livewire update
                         indikatorSelect.dispatchEvent(new Event('change'));
                     }
+
+                    // Re-initialize Select2 for modal pegawai select
+                    const pegawaiSelect = document.getElementById('user_id');
+                    if (pegawaiSelect) {
+                        $(pegawaiSelect).select2();
+                    }
+                }, 100);
+            });
+
+            // Initialize Select2 for pegawai elements
+            function initializeSelect2() {
+                $('.select2-pegawai').select2({
+                    placeholder: 'Semua Pegawai',
+                    allowClear: true,
+                    width: '100%',
+                    height: '100%'
+                });
+
+                $('.select2-modal-pegawai').select2({
+                    placeholder: 'Pilih Pegawai',
+                    allowClear: true,
+                    width: '100%',
+                    height: '100%'
+                });
+            }
+
+            // Initialize on page load
+            initializeSelect2();
+
+            // Re-initialize after Livewire updates
+            Livewire.on('showModal', () => {
+                setTimeout(() => {
+                    initializeSelect2();
                 }, 100);
             });
 

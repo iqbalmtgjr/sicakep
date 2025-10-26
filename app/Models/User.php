@@ -28,6 +28,8 @@ class User extends Authenticatable
         'bidang_id',
         'pangkat_golongan',
         'jabatan',
+        'atasan_id',      // TAMBAHAN
+        'level_jabatan'
     ];
 
     /**
@@ -217,5 +219,77 @@ class User extends Authenticatable
     public function isAdmin()
     {
         return $this->role === 'admin';
+    }
+
+    // TAMBAHAN: Relationship untuk hierarki
+    public function atasan()
+    {
+        return $this->belongsTo(User::class, 'atasan_id');
+    }
+
+    public function bawahan()
+    {
+        return $this->hasMany(User::class, 'atasan_id');
+    }
+
+    // Helper method
+    public function isKepalaDinas()
+    {
+        return $this->level_jabatan === 'kepala_dinas';
+    }
+
+    public function isSekretaris()
+    {
+        return $this->level_jabatan === 'sekretaris';
+    }
+
+    public function isKasubbag()
+    {
+        return $this->level_jabatan === 'kasubbag';
+    }
+
+    public function isKabid()
+    {
+        return $this->level_jabatan === 'kabid';
+    }
+
+    public function isKepalaUPT()
+    {
+        return $this->level_jabatan === 'kepala_upt';
+    }
+
+    public function isStaff()
+    {
+        return $this->level_jabatan === 'staff';
+    }
+
+    // Get semua bawahan (termasuk bawahan dari bawahan)
+    public function getAllBawahan()
+    {
+        $bawahan = collect();
+
+        foreach ($this->bawahan as $staff) {
+            $bawahan->push($staff);
+            $bawahan = $bawahan->merge($staff->getAllBawahan());
+        }
+
+        return $bawahan;
+    }
+
+    // Cek apakah user ini bisa menilai user lain
+    public function canAssess($userId)
+    {
+        // Kepala Dinas bisa menilai semua
+        if ($this->isKepalaDinas()) {
+            return true;
+        }
+
+        // Atasan langsung
+        $user = User::find($userId);
+        if ($user && $user->atasan_id === $this->id) {
+            return true;
+        }
+
+        return false;
     }
 }

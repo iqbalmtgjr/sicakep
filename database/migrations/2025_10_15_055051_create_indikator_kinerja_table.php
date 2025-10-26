@@ -15,10 +15,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('kode_indikator')->unique();
+            $table->text('sasaran_strategis');
             $table->text('nama_indikator');
+            $table->text('sasaran_program');
+            $table->text('indikator_program');
             $table->string('satuan');
             $table->decimal('target', 10, 2);
-            $table->integer('bobot')->default(0); // dalam persen
+            // $table->integer('bobot')->default(0); 
             $table->text('deskripsi')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();

@@ -25,6 +25,8 @@ class Index extends Component
     public $password;
     public $password_confirmation;
     public $bidang_id;
+    public $atasan_id;        // TAMBAHAN
+    public $level_jabatan;    // TAMBAHAN
 
     protected $rules = [
         'name' => 'required|string|max:255',
@@ -35,6 +37,8 @@ class Index extends Component
         'jabatan' => 'nullable|string|max:255',
         'password' => 'nullable|string|min:8|confirmed',
         'bidang_id' => 'nullable|exists:bidang,id',
+        'atasan_id' => 'nullable|exists:users,id',
+        'level_jabatan' => 'nullable|string',
     ];
 
     protected $messages = [
@@ -57,7 +61,12 @@ class Index extends Component
             ->paginate(10);
         $bidangs = Bidang::orderBy('nama_bidang')->get();
 
-        return view('livewire.pengguna.index', compact('users', 'bidangs'));
+        // Untuk dropdown atasan (hanya user dengan role atasan atau admin)
+        $atasans = User::whereIn('role', ['atasan', 'admin'])
+            ->orderBy('name')
+            ->get();
+
+        return view('livewire.pengguna.index', compact('users', 'bidangs', 'atasans'));
     }
 
     public function create()
@@ -79,6 +88,8 @@ class Index extends Component
         $this->pangkat_golongan = $user->pangkat_golongan;
         $this->jabatan = $user->jabatan;
         $this->bidang_id = $user->bidang_id;
+        $this->atasan_id = $user->atasan_id;           // TAMBAHAN
+        $this->level_jabatan = $user->level_jabatan;   // TAMBAHAN
         $this->password = '';
         $this->password_confirmation = '';
         $this->showModal = true;
@@ -100,6 +111,8 @@ class Index extends Component
             'pangkat_golongan' => 'nullable|string|max:255',
             'jabatan' => 'nullable|string|max:255',
             'bidang_id' => 'nullable|exists:bidang,id',
+            'atasan_id' => 'nullable|exists:users,id',
+            'level_jabatan' => 'nullable|string',
         ]);
 
         if ($this->editing) {
@@ -133,6 +146,8 @@ class Index extends Component
                 'pangkat_golongan' => $this->pangkat_golongan,
                 'jabatan' => $this->jabatan,
                 'bidang_id' => $this->bidang_id,
+                'atasan_id' => $this->atasan_id,           // TAMBAHAN
+                'level_jabatan' => $this->level_jabatan,   // TAMBAHAN
             ]);
 
             if ($this->password) {
@@ -166,6 +181,8 @@ class Index extends Component
                 'pangkat_golongan' => $this->pangkat_golongan,
                 'jabatan' => $this->jabatan,
                 'bidang_id' => $this->bidang_id,
+                'atasan_id' => $this->atasan_id,           // TAMBAHAN
+                'level_jabatan' => $this->level_jabatan,   // TAMBAHAN
                 'password' => bcrypt($this->password),
             ]);
 
@@ -206,6 +223,8 @@ class Index extends Component
         $this->pangkat_golongan = '';
         $this->jabatan = '';
         $this->bidang_id = null;
+        $this->atasan_id = null;           // TAMBAHAN
+        $this->level_jabatan = null;       // TAMBAHAN
         $this->password = '';
         $this->password_confirmation = '';
         $this->resetValidation();

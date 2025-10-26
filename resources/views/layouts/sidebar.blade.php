@@ -156,6 +156,22 @@
                                 <!--end:Menu link-->
                             </div>
                         @endif
+                        @if (auth()->user()->isAdmin() || auth()->user()->isAtasan())
+                            <div class="menu-item">
+                                <a class="menu-link {{ request()->routeIs('laporan.hierarki') ? 'active' : '' }}"
+                                    href="{{ route('laporan.hierarki') }}">
+                                    <span class="menu-icon">
+                                        <i class="ki-duotone ki-chart-simple-3 fs-2">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                            <span class="path3"></span>
+                                            <span class="path4"></span>
+                                        </i>
+                                    </span>
+                                    <span class="menu-title">Laporan Hierarki Kinerja</span>
+                                </a>
+                            </div>
+                        @endif
                         @if (auth()->check() && in_array(auth()->user()->role, ['atasan', 'admin']))
                             <div class="menu-item">
                                 <!--begin:Menu link-->

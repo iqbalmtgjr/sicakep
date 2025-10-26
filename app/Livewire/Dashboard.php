@@ -54,7 +54,7 @@ class Dashboard extends Component
                 'totalPeriode' => Periode::count(),
                 'periodeAktif' => Periode::where('is_active', true)->count(),
                 'realisasiMenunggu' => RealisasiKinerja::where('status', 'submitted')->count(),
-                'realisasiVerified' => RealisasiKinerja::where('status', 'verified')->count(),
+                'realisasiVerified' => RealisasiKinerja::where('status', 'verified')->where('')->count(),
                 'realisasiRejected' => RealisasiKinerja::where('status', 'rejected')->count(),
                 'recentRealisasi' => RealisasiKinerja::with(['user', 'targetKinerja.indikatorKinerja'])
                     ->latest()
@@ -62,13 +62,19 @@ class Dashboard extends Component
                     ->get(),
             ];
         } elseif ($user->isAtasan()) {
-            // Dashboard untuk Atasan
+            // Dashboard untuk Atasan - hanya melihat realisasi bawahan
+            $bawahanIds = $user->getAllBawahan()->pluck('id')->toArray();
+
             $data = [
-                'realisasiMenunggu' => RealisasiKinerja::where('status', 'submitted')->count(),
-                'realisasiVerified' => RealisasiKinerja::where('status', 'verified')->count(),
-                'realisasiRejected' => RealisasiKinerja::where('status', 'rejected')->count(),
+                'realisasiMenunggu' => RealisasiKinerja::whereIn('user_id', $bawahanIds)
+                    ->where('status', 'submitted')->count(),
+                'realisasiVerified' => RealisasiKinerja::whereIn('user_id', $bawahanIds)
+                    ->where('status', 'verified')->count(),
+                'realisasiRejected' => RealisasiKinerja::whereIn('user_id', $bawahanIds)
+                    ->where('status', 'rejected')->count(),
                 'myRealisasi' => RealisasiKinerja::where('user_id', $user->id)->count(),
                 'recentRealisasi' => RealisasiKinerja::with(['user', 'targetKinerja.indikatorKinerja'])
+                    ->whereIn('user_id', $bawahanIds)
                     ->where('status', 'submitted')
                     ->latest()
                     ->take(5)
