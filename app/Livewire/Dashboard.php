@@ -54,7 +54,7 @@ class Dashboard extends Component
                 'totalPeriode' => Periode::count(),
                 'periodeAktif' => Periode::where('is_active', true)->count(),
                 'realisasiMenunggu' => RealisasiKinerja::where('status', 'submitted')->count(),
-                'realisasiVerified' => RealisasiKinerja::where('status', 'verified')->where('')->count(),
+                'realisasiVerified' => RealisasiKinerja::where('status', 'verified')->count(),
                 'realisasiRejected' => RealisasiKinerja::where('status', 'rejected')->count(),
                 'recentRealisasi' => RealisasiKinerja::with(['user', 'targetKinerja.indikatorKinerja'])
                     ->latest()

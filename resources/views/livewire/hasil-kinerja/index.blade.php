@@ -141,7 +141,8 @@
                                                         @endif
                                                     </td>
                                                     <td>{{ $kategoriData->pesan }}</td>
-                                                    <td>{{ $data->penilai->name }} ({{ $data->penilai->role }})</td>
+                                                    <td>{{ $data->penilai->name }} ({{ $data->penilai->jabatan }})
+                                                    </td>
                                                     <td>{{ $data->created_at->format('d/m/Y H:i') }}</td>
                                                     <td class="text-end">
                                                         <button type="button"

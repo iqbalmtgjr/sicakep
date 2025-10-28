@@ -4,7 +4,7 @@
 
 <head>
     <base href="{{ url('/') }}" />
-    <title>{{ env('APP_NAME') }}</title>
+    <title>{{ config('app.name') }}</title>
     <meta charset="utf-8" />
     <meta name="description" content="" />
     <meta name="description"

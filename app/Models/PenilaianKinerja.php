@@ -49,6 +49,11 @@ class PenilaianKinerja extends Model
         return $this->belongsTo(User::class, 'dinilai_oleh');
     }
 
+    public function targetKinerja()
+    {
+        return $this->belongsTo(TargetKinerja::class, 'target_kinerja_id');
+    }
+
     // Helper Methods
     public function hitungPredikat()
     {

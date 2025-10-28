@@ -221,6 +221,40 @@
         </div>
     </div> --}}
 
+    <div class="title-section" style="margin-top: 130px">
+        <h2>LAMPIRAN</h2>
+    </div>
+
+    <div>
+        <table class="info-table">
+            <tr>
+                <td class="label">Sasaran Strategis</td>
+                <td>{{ $penilaian->targetKinerja->indikatorKinerja->sasaran_strategis }}</td>
+            </tr>
+            <tr>
+                <td class="label">Indikator Kinerja Sasaran</td>
+                <td>{{ $penilaian->targetKinerja->indikatorKinerja->nama_indikator }}</td>
+            </tr>
+            <tr>
+                <td class="label">Target</td>
+                <td>{{ $penilaian->targetKinerja->indikatorKinerja->target }}%</td>
+            </tr>
+            <tr>
+                <td class="label">Program</td>
+                <td>{{ $penilaian->targetKinerja->indikatorKinerja->sasaran_program }}</td>
+            </tr>
+            <tr>
+                <td class="label">Indikator Kinerja Program</td>
+                <td>{{ $penilaian->targetKinerja->indikatorKinerja->indikator_program }}</td>
+            </tr>
+            <tr>
+                <td class="label">Target</td>
+                <td>{{ $penilaian->targetKinerja->target }}%</td>
+                </td>
+            </tr>
+        </table>
+    </div>
+
     <div class="footer">
         <p>Dokumen ini dibuat secara otomatis pada {{ now()->format('d F Y H:i:s') }}</p>
     </div>
