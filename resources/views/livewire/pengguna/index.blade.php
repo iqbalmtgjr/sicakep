@@ -40,6 +40,18 @@
                                         @enderror
                                     </div>
                                     <!--end::Search-->
+                                    <!--begin::Filter-->
+                                    <div class="d-flex align-items-center position-relative my-1 ms-3">
+                                        <label for="bidang_filter" class="form-label me-2">Filter Bidang:</label>
+                                        <select class="form-select form-select-solid w-200px"
+                                            wire:model.live="bidang_filter" id="bidang_filter">
+                                            <option value="">Semua Bidang</option>
+                                            @foreach ($bidangs as $bidang)
+                                                <option value="{{ $bidang->id }}">{{ $bidang->nama_bidang }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <!--end::Filter-->
                                 </div>
                                 <!--begin::Card title-->
                                 <!--begin::Card toolbar-->
@@ -93,7 +105,9 @@
                                                 <th>Atasan Langsung</th> <!-- TAMBAHAN -->
                                                 <th>Pangkat/Golongan</th>
                                                 <th>Jabatan</th>
+                                                <th>Jabatans</th>
                                                 <th>Bidang</th>
+                                                <th>Bidangs</th>
                                                 <th class="text-end">Aksi</th>
                                             </tr>
                                         </thead>
@@ -156,7 +170,27 @@
                                                     </td>
                                                     <td>{{ $user->pangkat_golongan ?? '-' }}</td>
                                                     <td>{{ $user->jabatan ?? '-' }}</td>
+                                                    <td>
+                                                        @if ($user->jabatans->count() > 0)
+                                                            @foreach ($user->jabatans as $jabatan)
+                                                                <span
+                                                                    class="badge badge-light-info me-1">{{ $jabatan->nama_jabatan }}</span>
+                                                            @endforeach
+                                                        @else
+                                                            <span class="text-muted">-</span>
+                                                        @endif
+                                                    </td>
                                                     <td>{{ $user->bidang->nama_bidang ?? '-' }}</td>
+                                                    <td>
+                                                        @if ($user->bidangs->count() > 0)
+                                                            @foreach ($user->bidangs as $bidang)
+                                                                <span
+                                                                    class="badge badge-light-success me-1">{{ $bidang->nama_bidang }}</span>
+                                                            @endforeach
+                                                        @else
+                                                            <span class="text-muted">-</span>
+                                                        @endif
+                                                    </td>
                                                     <td class="text-end">
                                                         <button type="button"
                                                             class="btn btn-sm btn-icon btn-text-secondary rounded-pill"
@@ -182,7 +216,7 @@
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="8" class="text-center text-muted">Tidak ada data
+                                                    <td colspan="12" class="text-center text-muted">Tidak ada data
                                                         pengguna</td>
                                                 </tr>
                                             @endforelse
@@ -290,14 +324,36 @@
                                 <input type="text" class="form-control" id="jabatan" wire:model="jabatan">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="bidang_id" class="form-label">Bidang</label>
+                                <label for="bidang_id" class="form-label">Bidang Utama</label>
                                 <select class="form-select" id="bidang_id" wire:model="bidang_id">
-                                    <option value="">Pilih Bidang</option>
+                                    <option value="">Pilih Bidang Utama</option>
                                     @foreach ($bidangs as $bidang)
                                         <option value="{{ $bidang->id }}">{{ $bidang->nama_bidang }}</option>
                                     @endforeach
                                 </select>
                                 @error('bidang_id')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="bidang_ids" class="form-label">Bidang Tambahan (Multiple)</label>
+                                <select class="form-select" id="bidang_ids" wire:model="bidang_ids" multiple>
+                                    @foreach ($bidangs as $bidang)
+                                        <option value="{{ $bidang->id }}">{{ $bidang->nama_bidang }}</option>
+                                    @endforeach
+                                </select>
+                                @error('bidang_ids')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="jabatan_ids" class="form-label">Jabatan Tambahan (Multiple)</label>
+                                <select class="form-select" id="jabatan_ids" wire:model="jabatan_ids" multiple>
+                                    @foreach ($jabatans as $jabatan)
+                                        <option value="{{ $jabatan->id }}">{{ $jabatan->nama_jabatan }}</option>
+                                    @endforeach
+                                </select>
+                                @error('jabatan_ids')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>

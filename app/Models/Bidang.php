@@ -27,4 +27,9 @@ class Bidang extends Model
     {
         return $this->hasMany(User::class)->where('role', 'pegawai');
     }
+
+    public function userBidangs()
+    {
+        return $this->belongsToMany(User::class, 'user_bidang');
+    }
 }

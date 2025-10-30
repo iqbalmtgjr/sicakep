@@ -207,10 +207,13 @@
                                 @enderror
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="satuan" class="form-label">Satuan <span
+                                <label for="satuan" class="form-label">Satuan Target <span
                                         class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="satuan" wire:model="satuan"
-                                    placeholder="Contoh: Dokumen, Kegiatan" required>
+                                <select class="form-select" id="satuan" wire:model="satuan" required>
+                                    <option value="%">Persentase</option>
+                                    <option value="Unit">Unit</option>
+                                    <option value="Laporan/Dokumen">Laporan/Dokumen</option>
+                                </select>
                                 @error('satuan')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -234,8 +237,7 @@
                                 @enderror
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="kode_indikator" class="form-label">Kode Indikator <span
-                                        class="text-danger">*</span></label>
+                                <label for="kode_indikator" class="form-label">Kode Indikator</label>
                                 <input type="text" class="form-control" id="kode_indikator"
                                     wire:model="kode_indikator" placeholder="Contoh: IND-001" required>
                                 @error('kode_indikator')

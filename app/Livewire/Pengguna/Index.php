@@ -12,6 +12,7 @@ class Index extends Component
     use WithPagination;
 
     public $search = '';
+    public $bidang_filter = '';
     public $showModal = false;
     public $editing = false;
     public $userId;
@@ -25,6 +26,8 @@ class Index extends Component
     public $password;
     public $password_confirmation;
     public $bidang_id;
+    public $bidang_ids = [];  // TAMBAHAN: multiple bidang
+    public $jabatan_ids = []; // TAMBAHAN: multiple jabatan
     public $atasan_id;        // TAMBAHAN
     public $level_jabatan;    // TAMBAHAN
 
@@ -37,6 +40,10 @@ class Index extends Component
         'jabatan' => 'nullable|string|max:255',
         'password' => 'nullable|string|min:8|confirmed',
         'bidang_id' => 'nullable|exists:bidang,id',
+        'bidang_ids' => 'nullable|array',
+        'bidang_ids.*' => 'exists:bidang,id',
+        'jabatan_ids' => 'nullable|array',
+        'jabatan_ids.*' => 'exists:jabatan,id',
         'atasan_id' => 'nullable|exists:users,id',
         'level_jabatan' => 'nullable|string',
     ];
@@ -52,21 +59,40 @@ class Index extends Component
         $this->resetPage();
     }
 
+    public function updatingBidangFilter()
+    {
+        $this->resetPage();
+    }
+
     public function render()
     {
-        $users = User::with('bidang')
-            ->where('name', 'like', '%' . $this->search . '%')
-            ->orWhere('nip', 'like', '%' . $this->search . '%')
-            ->orWhere('email', 'like', '%' . $this->search . '%')
-            ->paginate(10);
+        $query = User::with('bidang', 'bidangs', 'jabatans')
+            ->where(function ($q) {
+                $q->where('name', 'like', '%' . $this->search . '%')
+                    ->orWhere('nip', 'like', '%' . $this->search . '%')
+                    ->orWhere('email', 'like', '%' . $this->search . '%');
+            });
+
+        // Filter berdasarkan bidang utama atau bidang tambahan
+        if ($this->bidang_filter) {
+            $query->where(function ($q) {
+                $q->where('bidang_id', $this->bidang_filter)
+                    ->orWhereHas('bidangs', function ($subQ) {
+                        $subQ->where('bidang_id', $this->bidang_filter);
+                    });
+            });
+        }
+
+        $users = $query->paginate(10);
         $bidangs = Bidang::orderBy('nama_bidang')->get();
+        $jabatans = \App\Models\Jabatan::orderBy('nama_jabatan')->get();
 
         // Untuk dropdown atasan (hanya user dengan role atasan atau admin)
         $atasans = User::whereIn('role', ['atasan', 'admin'])
             ->orderBy('name')
             ->get();
 
-        return view('livewire.pengguna.index', compact('users', 'bidangs', 'atasans'));
+        return view('livewire.pengguna.index', compact('users', 'bidangs', 'jabatans', 'atasans'));
     }
 
     public function create()
@@ -88,6 +114,8 @@ class Index extends Component
         $this->pangkat_golongan = $user->pangkat_golongan;
         $this->jabatan = $user->jabatan;
         $this->bidang_id = $user->bidang_id;
+        $this->bidang_ids = $user->bidangs->pluck('id')->toArray(); // TAMBAHAN
+        $this->jabatan_ids = $user->jabatans->pluck('id')->toArray(); // TAMBAHAN
         $this->atasan_id = $user->atasan_id;           // TAMBAHAN
         $this->level_jabatan = $user->level_jabatan;   // TAMBAHAN
         $this->password = '';
@@ -150,6 +178,10 @@ class Index extends Component
                 'level_jabatan' => $this->level_jabatan,   // TAMBAHAN
             ]);
 
+            // Update many-to-many relationships
+            $user->bidangs()->sync($this->bidang_ids);
+            $user->jabatans()->sync($this->jabatan_ids);
+
             if ($this->password) {
                 $user->update(['password' => bcrypt($this->password)]);
             }
@@ -173,7 +205,7 @@ class Index extends Component
                 'password' => 'required|string|min:8|confirmed',
             ]);
 
-            User::create([
+            $user = User::create([
                 'name' => $this->name,
                 'nip' => $this->nip,
                 'email' => $this->email,
@@ -185,6 +217,10 @@ class Index extends Component
                 'level_jabatan' => $this->level_jabatan,   // TAMBAHAN
                 'password' => bcrypt($this->password),
             ]);
+
+            // Attach many-to-many relationships
+            $user->bidangs()->attach($this->bidang_ids);
+            $user->jabatans()->attach($this->jabatan_ids);
 
             flash('Pengguna berhasil ditambahkan.', 'success', [], 'Berhasil');
         }
@@ -223,6 +259,8 @@ class Index extends Component
         $this->pangkat_golongan = '';
         $this->jabatan = '';
         $this->bidang_id = null;
+        $this->bidang_ids = [];           // TAMBAHAN
+        $this->jabatan_ids = [];          // TAMBAHAN
         $this->atasan_id = null;           // TAMBAHAN
         $this->level_jabatan = null;       // TAMBAHAN
         $this->password = '';

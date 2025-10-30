@@ -121,10 +121,10 @@ class Index extends Component
             $indikator = IndikatorKinerja::findOrFail($this->indikatorId);
 
             // Check kode uniqueness excluding current indikator
-            if ($this->kode_indikator !== $indikator->kode_indikator && IndikatorKinerja::where('kode_indikator', $this->kode_indikator)->exists()) {
-                $this->addError('kode_indikator', 'Kode indikator sudah digunakan.');
-                return;
-            }
+            // if ($this->kode_indikator !== $indikator->kode_indikator && IndikatorKinerja::where('kode_indikator', $this->kode_indikator)->exists()) {
+            //     $this->addError('kode_indikator', 'Kode indikator sudah digunakan.');
+            //     return;
+            // }
 
             $this->validate([
                 'user_id' => 'required|exists:users,id',
