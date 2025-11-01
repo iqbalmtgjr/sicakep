@@ -208,12 +208,12 @@
                                                     <td>
                                                         <span
                                                             class="badge badge-light-info">{{ number_format($target->target, 2, ',', '.') }}
-                                                            {{ $indikator->satuan }}</span>
+                                                            {{ $target->satuan }}</span>
                                                     </td>
                                                     <td>
                                                         <span
                                                             class="badge badge-light-success">{{ number_format($realisasi->realisasi, 2, ',', '.') }}
-                                                            {{ $indikator->satuan }}</span>
+                                                            {{ $target->satuan }}</span>
                                                     </td>
                                                     <td>
                                                         <span

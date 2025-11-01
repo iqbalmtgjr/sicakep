@@ -25,6 +25,7 @@ class Index extends Component
     public $periode_id;
     public $indikator_kinerja_id;
     public $target;
+    public $satuan;
     public $keterangan;
 
     protected $rules = [
@@ -119,6 +120,7 @@ class Index extends Component
         $this->periode_id = $target->periode_id;
         $this->indikator_kinerja_id = $target->indikator_kinerja_id;
         $this->target = $target->target;
+        $this->satuan = $target->satuan;
         $this->keterangan = $target->keterangan;
 
         $this->showModal = true;
@@ -152,6 +154,7 @@ class Index extends Component
                 'periode_id' => $this->periode_id,
                 'indikator_kinerja_id' => $this->indikator_kinerja_id,
                 'target' => $this->target,
+                'satuan' => $this->satuan,
                 'keterangan' => $this->keterangan,
             ]);
 
@@ -173,6 +176,7 @@ class Index extends Component
                 'periode_id' => $this->periode_id,
                 'indikator_kinerja_id' => $this->indikator_kinerja_id,
                 'target' => $this->target,
+                'satuan' => $this->satuan,
                 'keterangan' => $this->keterangan,
             ]);
 
@@ -216,6 +220,7 @@ class Index extends Component
         $this->periode_id = '';
         $this->indikator_kinerja_id = '';
         $this->target = '';
+        $this->satuan = '';
         $this->keterangan = '';
         $this->editing = false;
         $this->resetValidation();

@@ -423,9 +423,9 @@
                                                 </div>
                                             </td>
                                             <td>{{ number_format($target->target, 2, ',', '.') }}
-                                                {{ $target->indikatorKinerja->satuan }}</td>
+                                                {{ $target->satuan }}</td>
                                             <td>{{ number_format($realisasi, 2, ',', '.') }}
-                                                {{ $target->indikatorKinerja->satuan }}</td>
+                                                {{ $target->satuan }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <div class="progress h-6px w-100px me-2">

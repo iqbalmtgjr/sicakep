@@ -16,6 +16,7 @@ class TargetKinerja extends Model
         'indikator_kinerja_id',
         'periode_id',
         'target',
+        'satuan',
         'keterangan',
     ];
 

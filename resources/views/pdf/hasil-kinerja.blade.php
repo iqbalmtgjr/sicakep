@@ -150,7 +150,7 @@
     </header>
 
     <div class="title-section">
-        <h2> HASIL KINERJA EVALUASI <br> {{ strtoupper($penilaian->periode->nama_periode) }} TAHUN
+        <h2> HASIL EVALUASI KINERJA <br> {{ strtoupper($penilaian->periode->nama_periode) }} TAHUN
             {{ strtoupper($penilaian->periode->tahun) }}
         </h2>
     </div>
@@ -179,7 +179,7 @@
             </tr>
             <tr>
                 <td class="label">Dinilai Oleh</td>
-                <td>{{ $penilaian->penilai->name }} ({{ $penilaian->penilai->jabatan ?? $penilaian->penilai->role }})
+                <td>{{ $penilaian->penilai->name }}
                 </td>
             </tr>
         </table>
@@ -229,7 +229,7 @@
         <table class="info-table">
             <tr>
                 <td class="label">Sasaran Strategis</td>
-                <td>{{ $penilaian->targetKinerja->indikatorKinerja->sasaran_strategis }}</td>
+                <td>{{ $penilaian->targetKinerja->indikatorKinerja->sasaranStrategis->sasaran_strategis }}</td>
             </tr>
             <tr>
                 <td class="label">Indikator Kinerja Sasaran</td>
@@ -237,26 +237,27 @@
             </tr>
             <tr>
                 <td class="label">Target</td>
-                <td>{{ $penilaian->targetKinerja->indikatorKinerja->target }}%</td>
+                <td>{{ $penilaian->targetKinerja->indikatorKinerja->target }} {{ $penilaian->targetKinerja->satuan }}</td>
             </tr>
             <tr>
-                <td class="label">Program</td>
+                <td class="label">Program/Kegiatan</td>
                 <td>{{ $penilaian->targetKinerja->indikatorKinerja->sasaran_program }}</td>
             </tr>
             <tr>
-                <td class="label">Indikator Kinerja Program</td>
+                <td class="label">Indikator Kinerja Program/Kegiatan</td>
                 <td>{{ $penilaian->targetKinerja->indikatorKinerja->indikator_program }}</td>
             </tr>
             <tr>
                 <td class="label">Target</td>
-                <td>{{ $penilaian->targetKinerja->target }}%</td>
+                <td>{{ $penilaian->targetKinerja->target }} {{ $penilaian->targetKinerja->satuan }}</td>
                 </td>
             </tr>
         </table>
     </div>
 
     <div class="footer">
-        <p>Dokumen ini dibuat secara otomatis pada {{ now()->format('d F Y H:i:s') }}</p>
+        <!--<p>Dokumen ini dibuat secara otomatis pada {{ now()->format('d F Y H:i:s') }}</p>-->
+        <p>Dokumen ini dibuat secara otomatis pada {{ $penilaian->targetKinerja->realisasiKinerja->first()->verified_at->format('d F Y H:i:s') }}</p>
     </div>
 </body>
 

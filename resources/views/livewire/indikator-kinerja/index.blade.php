@@ -52,7 +52,6 @@
                                 <table class="table align-middle table-row-dashed fs-6 gy-5">
                                     <thead>
                                         <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-                                            <th>Kode</th>
                                             <th>Sasaran Strategis</th>
                                             <th>Nama Indikator</th>
                                             <th>Pegawai</th>
@@ -67,11 +66,7 @@
                                             <tr>
                                                 <td>
                                                     <span
-                                                        class="badge badge-light-primary fs-7">{{ $indikator->kode_indikator }}</span>
-                                                </td>
-                                                <td>
-                                                    <span
-                                                        class="text-gray-800 fw-bold">{{ $indikator->sasaran_strategis }}</span>
+                                                        class="text-gray-800 fw-bold">{{ $indikator->sasaranStrategis->sasaran_strategis ?? '-'}}</span>
                                                 </td>
                                                 <td>
                                                     <div class="d-flex flex-column">
@@ -173,56 +168,22 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <label for="sasaran_strategis" class="form-label">Sasaran Strategis <span
+                                <label for="user_id" class="form-label">Sasaran Strategis <span
                                         class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="sasaran_strategis"
-                                    wire:model="sasaran_strategis"
-                                    placeholder="Contoh: Meningkatkan produktivitas kerja" required>
-                                @error('sasaran_strategis')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="nama_indikator" class="form-label">Indikator Sasaran Strategis <span
-                                        class="text-danger">*</span></label>
-                                <textarea class="form-control" id="nama_indikator" wire:model="nama_indikator" rows="2"
-                                    placeholder="Contoh: Jumlah laporan yang diselesaikan" required></textarea>
-                                @error('nama_indikator')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="target" class="form-label">Target <span
-                                        class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="target" wire:model="target"
-                                    placeholder="100 atau 19,5" required>
-                                @error('target')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="satuan" class="form-label">Satuan Target <span
-                                        class="text-danger">*</span></label>
-                                <select class="form-select" id="satuan" wire:model="satuan" required>
-                                    <option value="%">Persentase</option>
-                                    <option value="Unit">Unit</option>
-                                    <option value="Laporan/Dokumen">Laporan/Dokumen</option>
+                                <select class="form-select" id="user_id" wire:model="sasaran_strategis" required>
+                                    <option value="">Pilih Sasaran Strategis</option>
+                                    @foreach ($sasaran as $item)
+                                        <option value="{{ $item->id }}">{{ $item->sasaran_strategis }} -
+                                            {{ $item->target }}</option>
+                                    @endforeach
                                 </select>
-                                @error('satuan')
+                                @error('user_id')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
+                            </div> 
                             </div>
-                        </div>
-                        <hr>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="row">
+                            <div class="col-md-12 mb-3">
                                 <label for="user_id" class="form-label">Pegawai <span
                                         class="text-danger">*</span></label>
                                 <select class="form-select" id="user_id" wire:model.live="user_id" required>
@@ -236,19 +197,11 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="kode_indikator" class="form-label">Kode Indikator</label>
-                                <input type="text" class="form-control" id="kode_indikator"
-                                    wire:model="kode_indikator" placeholder="Contoh: IND-001" required>
-                                @error('kode_indikator')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <label for="sasaran_program" class="form-label">Sasaran Program <span
+                                <label for="sasaran_program" class="form-label">Sasaran Program/Kegiatan <span
                                         class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="sasaran_program"
                                     wire:model="sasaran_program"
@@ -261,7 +214,7 @@
 
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <label for="indikator_program" class="form-label">Indikator Program <span
+                                <label for="indikator_program" class="form-label">Indikator Program/Kegiatan <span
                                         class="text-danger">*</span></label>
                                 <textarea class="form-control" id="indikator_program" wire:model="indikator_program" rows="2"
                                     placeholder="Contoh: Jumlah laporan yang diselesaikan" required></textarea>

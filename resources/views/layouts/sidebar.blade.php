@@ -130,6 +130,19 @@
                                 <!--end:Menu link-->
                             </div>
                         @endif
+                        @if (auth()->check() && auth()->user()->isAdmin())
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link {{ request()->is('sasaran-strategis*') ? 'active' : '' }}"
+                                    href="{{ route('sasaran-strategis.index') }}">
+                                    <span class="menu-icon">
+                                        <i class="bi bi-compass fs-2"></i>
+                                    </span>
+                                    <span class="menu-title">Sasaran Strategis</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                        @endif
                         @if (auth()->check() && in_array(auth()->user()->role, ['pegawai']))
                             <div class="menu-item">
                                 <!--begin:Menu link-->
@@ -143,7 +156,7 @@
                                 <!--end:Menu link-->
                             </div>
                         @endif
-                        @if (auth()->check() && in_array(auth()->user()->role, ['pegawai', 'atasan', 'admin']))
+                        @if (auth()->check() && in_array(auth()->user()->role, ['pegawai', 'atasan']))
                             <div class="menu-item">
                                 <!--begin:Menu link-->
                                 <a class="menu-link {{ request()->is('hasil-kinerja*') ? 'active' : '' }}"
@@ -156,7 +169,7 @@
                                 <!--end:Menu link-->
                             </div>
                         @endif
-                        @if (auth()->user()->isAdmin() || auth()->user()->isAtasan())
+                        {{-- @if (auth()->user()->isAdmin() || auth()->user()->isAtasan())
                             <div class="menu-item">
                                 <a class="menu-link {{ request()->routeIs('laporan.hierarki') ? 'active' : '' }}"
                                     href="{{ route('laporan.hierarki') }}">
@@ -171,8 +184,8 @@
                                     <span class="menu-title">Laporan Hierarki Kinerja</span>
                                 </a>
                             </div>
-                        @endif
-                        @if (auth()->check() && in_array(auth()->user()->role, ['atasan', 'admin']))
+                        @endif --}}
+                        @if (auth()->check() && in_array(auth()->user()->role, ['atasan']))
                             <div class="menu-item">
                                 <!--begin:Menu link-->
                                 <a class="menu-link {{ request()->is('verifikasi*') ? 'active' : '' }}"
