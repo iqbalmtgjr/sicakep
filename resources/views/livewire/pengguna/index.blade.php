@@ -97,6 +97,7 @@
                                         class="table align-middle table-row-dashed fs-6 gy-5">
                                         <thead>
                                             <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+                                                <th>No</th>
                                                 <th>Nama</th>
                                                 <th>NIP</th>
                                                 <th>Email</th>
@@ -114,6 +115,7 @@
                                         <tbody class="text-gray-600 fw-semibold">
                                             @forelse($users as $index => $user)
                                                 <tr>
+                                                    <td>{{ $users->firstItem() + $loop->index }}</td>
                                                     <td>
                                                         <div class="d-flex align-items-center">
                                                             <div

@@ -15,15 +15,15 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Muhammad Iqbal',
-            'email' => 'iqbalmtgjr@gmail.com',
-        ]);
+        // User::factory()->create([
+        //     'name' => 'Muhammad Iqbal',
+        //     'email' => 'iqbalmtgjr@gmail.com',
+        // ]);
 
         $this->call([
             JabatanSeeder::class,
-            OrganisasiSeeder::class,
-            PenilaianKategoriSeeder::class,
+            // OrganisasiSeeder::class,
+            // PenilaianKategoriSeeder::class,
         ]);
     }
 }

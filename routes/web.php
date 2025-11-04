@@ -57,6 +57,9 @@ Route::middleware(['auth'])->group(function () {
 
         // Target Kinerja
         Route::get('target-kinerja', TargetIndex::class)->name('target.index');
+
+        // Sasaran Strategis
+        Route::get('sasaran-strategis', \App\Livewire\SasaranStrategis\Index::class)->name('sasaran-strategis.index');
     });
 
     // Menu untuk Pegawai & Atasan

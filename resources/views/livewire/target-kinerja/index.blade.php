@@ -110,7 +110,7 @@
                                                     <td>
                                                         <span
                                                             class="badge badge-light-info">{{ number_format($target->target, 2, ',', '.') }}
-                                                            {{ $target->indikatorKinerja->satuan }}</span>
+                                                            {{ $target->satuan ?? '' }}</span>
                                                     </td>
                                                     <td>
                                                         <span
@@ -237,12 +237,20 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-12 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label for="target" class="form-label">Target <span
                                         class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="target" wire:model="target"
                                     placeholder="Masukkan nilai target, contoh: 100 atau 19,5" required>
                                 @error('target')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="target" class="form-label">Satuan</label>
+                                <input type="text" class="form-control" id="satuan" wire:model="satuan"
+                                    placeholder="Masukkan satuan target, contoh: unit" required>
+                                @error('satuan')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
