@@ -21,6 +21,7 @@ class Index extends Component
     public $nip;
     public $email;
     public $role;
+    public $roles = [];       // TAMBAHAN: multiple roles
     public $pangkat_golongan;
     public $jabatan;
     public $password;
@@ -35,7 +36,9 @@ class Index extends Component
         'name' => 'required|string|max:255',
         'nip' => 'required|string|max:255|unique:users,nip',
         'email' => 'required|string|email|max:255|unique:users,email',
-        'role' => 'required|string|in:admin,pegawai',
+        'role' => 'required|string|in:admin,pegawai,atasan',
+        'roles' => 'nullable|array',
+        'roles.*' => 'in:admin,pegawai,atasan',
         'pangkat_golongan' => 'nullable|string|max:255',
         'jabatan' => 'nullable|string|max:255',
         'password' => 'nullable|string|min:8|confirmed',
@@ -111,6 +114,7 @@ class Index extends Component
         $this->nip = $user->nip;
         $this->email = $user->email;
         $this->role = $user->role;
+        $this->roles = $user->roles ?? [];             // TAMBAHAN
         $this->pangkat_golongan = $user->pangkat_golongan;
         $this->jabatan = $user->jabatan;
         $this->bidang_id = $user->bidang_id;
@@ -136,6 +140,8 @@ class Index extends Component
         $this->validate([
             'name' => 'required|string|max:255',
             'role' => 'required|string|in:admin,pegawai,atasan',
+            'roles' => 'nullable|array',
+            'roles.*' => 'in:admin,pegawai,atasan',
             'pangkat_golongan' => 'nullable|string|max:255',
             'jabatan' => 'nullable|string|max:255',
             'bidang_id' => 'nullable|exists:bidang,id',
@@ -171,6 +177,7 @@ class Index extends Component
                 'nip' => $this->nip,
                 'email' => $this->email,
                 'role' => $this->role,
+                'roles' => $this->roles,                   // TAMBAHAN
                 'pangkat_golongan' => $this->pangkat_golongan,
                 'jabatan' => $this->jabatan,
                 'bidang_id' => $this->bidang_id,
@@ -210,6 +217,7 @@ class Index extends Component
                 'nip' => $this->nip,
                 'email' => $this->email,
                 'role' => $this->role,
+                'roles' => $this->roles,                   // TAMBAHAN
                 'pangkat_golongan' => $this->pangkat_golongan,
                 'jabatan' => $this->jabatan,
                 'bidang_id' => $this->bidang_id,
@@ -256,6 +264,7 @@ class Index extends Component
         $this->nip = '';
         $this->email = '';
         $this->role = 'pegawai';
+        $this->roles = [];                 // TAMBAHAN
         $this->pangkat_golongan = '';
         $this->jabatan = '';
         $this->bidang_id = null;

@@ -13,9 +13,7 @@ class IndikatorKinerja extends Model
 
     protected $fillable = [
         'user_id',
-        'kode_indikator',
-        'sasaran_strategis',
-        'nama_indikator',
+        'sasaran_strategis_id',
         'sasaran_program',
         'indikator_program',
         'satuan',
@@ -40,6 +38,11 @@ class IndikatorKinerja extends Model
     public function targetKinerja()
     {
         return $this->hasMany(TargetKinerja::class);
+    }
+    
+    public function sasaranStrategis()
+    {
+        return $this->belongsTo(SasaranStrategis::class);
     }
 
     // Scopes

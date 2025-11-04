@@ -119,7 +119,7 @@ class RealisasiKinerjaObserver
             'realisasi_id' => $realisasi->id,
             'user_name' => $realisasi->user->name,
             'user_nip' => $realisasi->user->nip,
-            'indikator' => $realisasi->targetKinerja->indikatorKinerja->nama_indikator,
+            'indikator' => $realisasi->targetKinerja->indikator_program,
             'periode' => $realisasi->targetKinerja->periode->nama_periode,
             'realisasi' => $realisasi->realisasi,
             'tanggal_realisasi' => $realisasi->tanggal_realisasi->format('d F Y'),

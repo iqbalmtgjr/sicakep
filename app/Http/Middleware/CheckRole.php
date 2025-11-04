@@ -15,12 +15,21 @@ class CheckRole
             return redirect()->route('login');
         }
 
-        $userRole = auth()->user()->role;
-        $levelJabatan = auth()->user()->level_jabatan;
+        $user = auth()->user();
+        $userRole = $user->role;
+        $userRoles = $user->roles ?? [];
+        $levelJabatan = $user->level_jabatan;
 
-        // Cek role biasa
+        // Cek role biasa (single role)
         if (in_array($userRole, $roles)) {
             return $next($request);
+        }
+
+        // TAMBAHAN: Cek multiple roles
+        foreach ($userRoles as $role) {
+            if (in_array($role, $roles)) {
+                return $next($request);
+            }
         }
 
         // TAMBAHAN: Cek berdasarkan level jabatan

@@ -4,6 +4,7 @@ namespace App\Livewire\IndikatorKinerja;
 
 use App\Models\IndikatorKinerja;
 use App\Models\User;
+use App\Models\SasaranStrategis;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -18,9 +19,9 @@ class Index extends Component
     public $indikatorId;
 
     public $user_id;
-    public $kode_indikator;
+    // public $kode_indikator;
     public $sasaran_strategis;
-    public $nama_indikator;
+    // public $nama_indikator;
     public $sasaran_program;
     public $indikator_program;
     public $satuan;
@@ -31,9 +32,9 @@ class Index extends Component
 
     protected $rules = [
         'user_id' => 'required|exists:users,id',
-        'kode_indikator' => 'required|string|max:50|unique:indikator_kinerja,kode_indikator',
-        'sasaran_strategis' => 'required|string|max:255',
-        'nama_indikator' => 'required|string',
+        // 'kode_indikator' => 'required|string|max:50|unique:indikator_kinerja,kode_indikator',
+        // 'sasaran_strategis' => 'required|string|max:255',
+        // 'nama_indikator' => 'required|string',
         'sasaran_program' => 'required|string|max:255',
         'indikator_program' => 'required|string',
         'satuan' => 'required|string|max:50',
@@ -45,9 +46,9 @@ class Index extends Component
 
     protected $messages = [
         'user_id.required' => 'Pegawai wajib dipilih.',
-        'kode_indikator.required' => 'Kode indikator wajib diisi.',
-        'kode_indikator.unique' => 'Kode indikator sudah digunakan.',
-        'sasaran_strategis.required' => 'Sasaran strategis wajib diisi.',
+        // 'kode_indikator.required' => 'Kode indikator wajib diisi.',
+        // 'kode_indikator.unique' => 'Kode indikator sudah digunakan.',
+        // 'sasaran_strategis.required' => 'Sasaran strategis wajib diisi.',
         'nama_indikator.required' => 'Nama indikator wajib diisi.',
         'sasaran_program.required' => 'Sasaran program wajib diisi.',
         'indikator_program.required' => 'Indikator program wajib diisi.',
@@ -83,8 +84,9 @@ class Index extends Component
 
         $indikators = $query->latest()->paginate(10);
         $users = User::where('role', '!=', 'admin')->orderBy('name')->get();
+        $sasaran = SasaranStrategis::all();
 
-        return view('livewire.indikator-kinerja.index', compact('indikators', 'users'));
+        return view('livewire.indikator-kinerja.index', compact('indikators', 'users', 'sasaran'));
     }
 
     public function create()
@@ -100,9 +102,9 @@ class Index extends Component
         $indikator = IndikatorKinerja::findOrFail($id);
         $this->indikatorId = $id;
         $this->user_id = $indikator->user_id;
-        $this->kode_indikator = $indikator->kode_indikator;
-        $this->sasaran_strategis = $indikator->sasaran_strategis;
-        $this->nama_indikator = $indikator->nama_indikator;
+        // $this->kode_indikator = $indikator->kode_indikator;
+        $this->sasaran_strategis = $indikator->sasaran_strategis_id;
+        // $this->nama_indikator = $indikator->nama_indikator;
         $this->sasaran_program = $indikator->sasaran_program;
         $this->indikator_program = $indikator->indikator_program;
         $this->satuan = $indikator->satuan;
@@ -125,12 +127,13 @@ class Index extends Component
             //     $this->addError('kode_indikator', 'Kode indikator sudah digunakan.');
             //     return;
             // }
+            // dd($this->sasaran_strategis);
 
             $this->validate([
                 'user_id' => 'required|exists:users,id',
-                'kode_indikator' => 'required|string|max:50',
-                'sasaran_strategis' => 'required|string|max:255',
-                'nama_indikator' => 'required|string',
+                // 'kode_indikator' => 'required|string|max:50',
+                // 'sasaran_strategis' => 'required|string|max:255',
+                // 'nama_indikator' => 'required|string',
                 'sasaran_program' => 'required|string|max:255',
                 'indikator_program' => 'required|string',
                 'satuan' => 'required|string|max:50',
@@ -142,9 +145,9 @@ class Index extends Component
 
             $indikator->update([
                 'user_id' => $this->user_id,
-                'kode_indikator' => $this->kode_indikator,
-                'sasaran_strategis' => $this->sasaran_strategis,
-                'nama_indikator' => $this->nama_indikator,
+                // 'kode_indikator' => $this->kode_indikator,
+                'sasaran_strategis_id' => $this->sasaran_strategis,
+                // 'nama_indikator' => $this->nama_indikator,
                 'sasaran_program' => $this->sasaran_program,
                 'indikator_program' => $this->indikator_program,
                 'satuan' => $this->satuan,
@@ -156,18 +159,18 @@ class Index extends Component
 
             flash('Indikator kinerja berhasil diperbarui.', 'success', [], 'Berhasil');
         } else {
-            if (IndikatorKinerja::where('kode_indikator', $this->kode_indikator)->exists()) {
-                $this->addError('kode_indikator', 'Kode indikator sudah digunakan.');
-                return;
-            }
+            // if (IndikatorKinerja::where('kode_indikator', $this->kode_indikator)->exists()) {
+            //     $this->addError('kode_indikator', 'Kode indikator sudah digunakan.');
+            //     return;
+            // }
 
             $this->validate();
 
             IndikatorKinerja::create([
                 'user_id' => $this->user_id,
-                'kode_indikator' => $this->kode_indikator,
-                'sasaran_strategis' => $this->sasaran_strategis,
-                'nama_indikator' => $this->nama_indikator,
+                // 'kode_indikator' => $this->kode_indikator,
+                'sasaran_strategis_id' => $this->sasaran_strategis,
+                // 'nama_indikator' => $this->nama_indikator,
                 'sasaran_program' => $this->sasaran_program,
                 'indikator_program' => $this->indikator_program,
                 'satuan' => $this->satuan,
@@ -223,9 +226,9 @@ class Index extends Component
     {
         $this->indikatorId = null;
         $this->user_id = '';
-        $this->kode_indikator = '';
-        $this->sasaran_strategis = '';
-        $this->nama_indikator = '';
+        // $this->kode_indikator = '';
+        // $this->sasaran_strategis = '';
+        // $this->nama_indikator = '';
         $this->sasaran_program = '';
         $this->indikator_program = '';
         $this->satuan = '';

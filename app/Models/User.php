@@ -25,6 +25,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'roles',          // TAMBAHAN: multiple roles
         'bidang_id',
         'pangkat_golongan',
         'jabatan',
@@ -54,6 +55,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'roles' => 'array',  // TAMBAHAN: cast roles sebagai array
         ];
     }
 
@@ -218,17 +220,38 @@ class User extends Authenticatable
     // Helper Methods
     public function isPegawai()
     {
-        return $this->role === 'pegawai';
+        return $this->role === 'pegawai' || in_array('pegawai', $this->roles ?? []);
     }
 
     public function isAtasan()
     {
-        return $this->role === 'atasan';
+        return $this->role === 'atasan' || in_array('atasan', $this->roles ?? []);
     }
 
     public function isAdmin()
     {
-        return $this->role === 'admin';
+        return $this->role === 'admin' || in_array('admin', $this->roles ?? []);
+    }
+
+    // TAMBAHAN: Helper methods untuk multiple roles
+    public function hasRole($role)
+    {
+        return $this->role === $role || in_array($role, $this->roles ?? []);
+    }
+
+    public function hasAnyRole($roles)
+    {
+        if (!is_array($roles)) {
+            $roles = [$roles];
+        }
+
+        foreach ($roles as $role) {
+            if ($this->hasRole($role)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // TAMBAHAN: Relationship untuk hierarki
