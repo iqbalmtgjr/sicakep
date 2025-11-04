@@ -5,12 +5,18 @@
         data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="225px"
         data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_app_sidebar_mobile_toggle">
         <!--begin::Logo-->
-        <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
+        <div class="app-sidebar-logo px-6" style="justify-content: center !important" id="kt_app_sidebar_logo">
             <!--begin::Logo image-->
             <a href="{{ route('home') }}">
-                <img alt="Logo" src="{{ asset('/logo.png') }}" class="h-25px app-sidebar-logo-default" />
-                <img alt="Logo" src="{{ asset('/logo.png') }}" class="h-20px app-sidebar-logo-minimize" />
+                <img alt="Logo Default" src="{{ asset('/sicakep.png') }}"
+                    class="mt-8 h-70px app-sidebar-logo-default" />
+                <img alt="Logo" src="{{ asset('/logo.png') }}" class="h-35px app-sidebar-logo-minimize" />
             </a>
+            {{-- <div class="text-center mt-1">
+                <span class="fw-bold fs-5 text-gray-800 d-none d-lg-block">SICAKEP</span>
+            </div> --}}
+            <!--begin::Logo text-->
+            <!--end::Logo text-->
             <div id="kt_app_sidebar_toggle"
                 class="app-sidebar-toggle btn btn-icon btn-shadow btn-sm btn-color-muted btn-active-color-primary h-30px w-30px position-absolute top-50 start-100 translate-middle rotate"
                 data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body"

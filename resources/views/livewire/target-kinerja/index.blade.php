@@ -102,8 +102,6 @@
                                                     <td>
                                                         <div class="d-flex flex-column">
                                                             <span
-                                                                class="badge badge-light-primary mb-1">{{ $target->indikatorKinerja->kode_indikator }}</span>
-                                                            <span
                                                                 class="text-gray-800">{{ Str::limit($target->indikatorKinerja->indikator_program, 50) }}</span>
                                                         </div>
                                                     </td>
@@ -115,7 +113,7 @@
                                                     <td>
                                                         <span
                                                             class="badge badge-light-{{ $badgeClass }}">{{ number_format($totalRealisasi, 2, ',', '.') }}
-                                                            {{ $target->indikatorKinerja->satuan }}</span>
+                                                            {{ $target->satuan }}</span>
                                                     </td>
                                                     <td>
                                                         <div class="d-flex align-items-center">

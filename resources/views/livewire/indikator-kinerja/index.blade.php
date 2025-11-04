@@ -19,15 +19,15 @@
                         <div class="card">
                             <div class="card-header border-0 pt-6">
                                 <div class="card-title">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="d-flex align-items-center position-relative my-1">
-                                            <i class="ki-duotone ki-magnifier fs-1 position-absolute ms-6">
-                                                <span class="path1"></span>
-                                                <span class="path2"></span>
-                                            </i>
-                                            <input type="text" class="form-control form-control-solid w-250px ps-15"
-                                                wire:model.live.debounce.300ms="search" placeholder="Cari indikator...">
-                                        </div>
+                                    <div class="d-flex align-items-center position-relative my-1">
+                                        <i class="ki-duotone ki-magnifier fs-1 position-absolute ms-6">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                        </i>
+                                        <input type="text" class="form-control form-control-solid w-200px ps-15"
+                                            wire:model.live.debounce.300ms="search" placeholder="Cari indikator...">
+                                    </div>
+                                    <div class="d-flex align-items-center position-relative my-1">
                                         <select class="form-select form-select-solid w-200px"
                                             wire:model.live="filterUser">
                                             <option value="">Semua Pegawai</option>
@@ -49,104 +49,106 @@
                             </div>
 
                             <div class="card-body py-4">
-                                <table class="table align-middle table-row-dashed fs-6 gy-5">
-                                    <thead>
-                                        <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-                                            <th>Sasaran Strategis</th>
-                                            <th>Nama Indikator</th>
-                                            <th>Pegawai</th>
-                                            <th>Target</th>
-                                            {{-- <th>Bobot</th> --}}
-                                            <th>Status</th>
-                                            <th class="text-end">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="text-gray-600 fw-semibold">
-                                        @forelse($indikators as $indikator)
-                                            <tr>
-                                                <td>
-                                                    <span
-                                                        class="text-gray-800 fw-bold">{{ $indikator->sasaranStrategis->sasaran_strategis ?? '-'}}</span>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex flex-column">
+                                <div class="table-responsive">
+                                    <table class="table align-middle table-row-dashed fs-6 gy-5">
+                                        <thead>
+                                            <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+                                                <th>Sasaran Strategis</th>
+                                                <th>Nama Indikator</th>
+                                                <th>Pegawai</th>
+                                                <th>Target</th>
+                                                {{-- <th>Bobot</th> --}}
+                                                <th>Status</th>
+                                                <th class="text-end">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="text-gray-600 fw-semibold">
+                                            @forelse($indikators as $indikator)
+                                                <tr>
+                                                    <td>
                                                         <span
-                                                            class="text-gray-800 fw-bold mb-1">{{ $indikator->nama_indikator }}</span>
-                                                        @if ($indikator->deskripsi)
-                                                            <span
-                                                                class="text-muted fs-7">{{ Str::limit($indikator->deskripsi, 50) }}</span>
-                                                        @endif
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div
-                                                            class="symbol symbol-circle symbol-35px overflow-hidden me-3">
-                                                            <div class="symbol-label fs-6 bg-light-info text-info">
-                                                                {{ $indikator->user->initials() }}
-                                                            </div>
-                                                        </div>
+                                                            class="text-gray-800 fw-bold">{{ $indikator->sasaranStrategis->sasaran_strategis ?? '-' }}</span>
+                                                    </td>
+                                                    <td>
                                                         <div class="d-flex flex-column">
                                                             <span
-                                                                class="text-gray-800 mb-1">{{ $indikator->user->name }}</span>
-                                                            <span
-                                                                class="text-muted fs-7">{{ $indikator->user->jabatan ?? '-' }}</span>
+                                                                class="text-gray-800 fw-bold mb-1">{{ $indikator->nama_indikator }}</span>
+                                                            @if ($indikator->deskripsi)
+                                                                <span
+                                                                    class="text-muted fs-7">{{ Str::limit($indikator->deskripsi, 50) }}</span>
+                                                            @endif
                                                         </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <span
-                                                        class="badge badge-light-success">{{ number_format($indikator->target, 2, ',', '.') }}
-                                                        {{ $indikator->satuan }}</span>
-                                                </td>
-                                                {{-- <td>
+                                                    </td>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <div
+                                                                class="symbol symbol-circle symbol-35px overflow-hidden me-3">
+                                                                <div class="symbol-label fs-6 bg-light-info text-info">
+                                                                    {{ $indikator->user->initials() }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex flex-column">
+                                                                <span
+                                                                    class="text-gray-800 mb-1">{{ $indikator->user->name }}</span>
+                                                                <span
+                                                                    class="text-muted fs-7">{{ $indikator->user->jabatan ?? '-' }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <span
+                                                            class="badge badge-light-success">{{ number_format($indikator->target, 2, ',', '.') }}
+                                                            {{ $indikator->satuan }}</span>
+                                                    </td>
+                                                    {{-- <td>
                                                     <span
                                                         class="badge badge-light-warning">{{ $indikator->bobot }}%</span>
                                                 </td> --}}
-                                                <td>
-                                                    <div class="form-check form-switch">
-                                                        <input class="form-check-input" type="checkbox"
-                                                            wire:click="toggleStatus({{ $indikator->id }})"
-                                                            {{ $indikator->is_active ? 'checked' : '' }}>
-                                                        <label class="form-check-label">
-                                                            <span
-                                                                class="badge badge-light-{{ $indikator->is_active ? 'success' : 'danger' }}">
-                                                                {{ $indikator->is_active ? 'Aktif' : 'Nonaktif' }}
-                                                            </span>
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td class="text-end">
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-icon btn-text-secondary rounded-pill"
-                                                        wire:click="edit({{ $indikator->id }})" title="Edit">
-                                                        <i class="ki-duotone ki-pencil fs-2">
-                                                            <span class="path1"></span>
-                                                            <span class="path2"></span>
-                                                        </i>
-                                                    </button>
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-icon btn-text-secondary rounded-pill"
-                                                        wire:click="confirmDelete({{ $indikator->id }})"
-                                                        title="Hapus">
-                                                        <i class="ki-duotone ki-trash fs-2">
-                                                            <span class="path1"></span>
-                                                            <span class="path2"></span>
-                                                            <span class="path3"></span>
-                                                            <span class="path4"></span>
-                                                            <span class="path5"></span>
-                                                        </i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="8" class="text-center text-muted">Tidak ada data
-                                                    indikator kinerja</td>
-                                            </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
+                                                    <td>
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                wire:click="toggleStatus({{ $indikator->id }})"
+                                                                {{ $indikator->is_active ? 'checked' : '' }}>
+                                                            <label class="form-check-label">
+                                                                <span
+                                                                    class="badge badge-light-{{ $indikator->is_active ? 'success' : 'danger' }}">
+                                                                    {{ $indikator->is_active ? 'Aktif' : 'Nonaktif' }}
+                                                                </span>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <button type="button"
+                                                            class="btn btn-sm btn-icon btn-text-secondary rounded-pill"
+                                                            wire:click="edit({{ $indikator->id }})" title="Edit">
+                                                            <i class="ki-duotone ki-pencil fs-2">
+                                                                <span class="path1"></span>
+                                                                <span class="path2"></span>
+                                                            </i>
+                                                        </button>
+                                                        <button type="button"
+                                                            class="btn btn-sm btn-icon btn-text-secondary rounded-pill"
+                                                            wire:click="confirmDelete({{ $indikator->id }})"
+                                                            title="Hapus">
+                                                            <i class="ki-duotone ki-trash fs-2">
+                                                                <span class="path1"></span>
+                                                                <span class="path2"></span>
+                                                                <span class="path3"></span>
+                                                                <span class="path4"></span>
+                                                                <span class="path5"></span>
+                                                            </i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="8" class="text-center text-muted">Tidak ada data
+                                                        indikator kinerja</td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
                                 {{ $indikators->links() }}
                             </div>
                         </div>
@@ -180,9 +182,9 @@
                                 @error('user_id')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
-                            </div> 
                             </div>
-                            <div class="row">
+                        </div>
+                        <div class="row">
                             <div class="col-md-12 mb-3">
                                 <label for="user_id" class="form-label">Pegawai <span
                                         class="text-danger">*</span></label>

@@ -341,7 +341,7 @@
                                         <option value="{{ $target->id }}">
                                             {{ $target->periode->nama_periode }} -
                                             {{ $target->indikatorKinerja->indikator_program }}
-                                            (Target: {{ $target->target }} {{ $target->indikatorKinerja->satuan }})
+                                            (Target: {{ $target->target }} {{ $target->satuan }})
                                         </option>
                                     @endforeach
                                 </select>

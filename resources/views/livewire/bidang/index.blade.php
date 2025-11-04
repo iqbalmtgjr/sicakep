@@ -41,59 +41,64 @@
                             </div>
 
                             <div class="card-body py-4">
-                                <table class="table align-middle table-row-dashed fs-6 gy-5">
-                                    <thead>
-                                        <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-                                            <th>Kode Bidang</th>
-                                            <th>Nama Bidang</th>
-                                            <th>Deskripsi</th>
-                                            <th>Jumlah Pegawai</th>
-                                            <th class="text-end">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="text-gray-600 fw-semibold">
-                                        @forelse($bidangs as $bidang)
-                                            <tr>
-                                                <td>
-                                                    <span
-                                                        class="badge badge-light-primary">{{ $bidang->kode_bidang }}</span>
-                                                </td>
-                                                <td>{{ $bidang->nama_bidang }}</td>
-                                                <td>{{ $bidang->deskripsi ?? '-' }}</td>
-                                                <td>
-                                                    <span class="badge badge-light-info">{{ $bidang->users()->count() }}
-                                                        Pegawai</span>
-                                                </td>
-                                                <td class="text-end">
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-icon btn-text-secondary rounded-pill"
-                                                        wire:click="edit({{ $bidang->id }})" title="Edit">
-                                                        <i class="ki-duotone ki-pencil fs-2">
-                                                            <span class="path1"></span>
-                                                            <span class="path2"></span>
-                                                        </i>
-                                                    </button>
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-icon btn-text-secondary rounded-pill"
-                                                        wire:click="confirmDelete({{ $bidang->id }})" title="Hapus">
-                                                        <i class="ki-duotone ki-trash fs-2">
-                                                            <span class="path1"></span>
-                                                            <span class="path2"></span>
-                                                            <span class="path3"></span>
-                                                            <span class="path4"></span>
-                                                            <span class="path5"></span>
-                                                        </i>
-                                                    </button>
-                                                </td>
+                                <div class="table-responsive">
+                                    <table class="table align-middle table-row-dashed fs-6 gy-5">
+                                        <thead>
+                                            <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+                                                <th>Kode Bidang</th>
+                                                <th>Nama Bidang</th>
+                                                <th>Deskripsi</th>
+                                                <th>Jumlah Pegawai</th>
+                                                <th class="text-end">Aksi</th>
                                             </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="5" class="text-center text-muted">Tidak ada data bidang
-                                                </td>
-                                            </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody class="text-gray-600 fw-semibold">
+                                            @forelse($bidangs as $bidang)
+                                                <tr>
+                                                    <td>
+                                                        <span
+                                                            class="badge badge-light-primary">{{ $bidang->kode_bidang }}</span>
+                                                    </td>
+                                                    <td>{{ $bidang->nama_bidang }}</td>
+                                                    <td>{{ $bidang->deskripsi ?? '-' }}</td>
+                                                    <td>
+                                                        <span
+                                                            class="badge badge-light-info">{{ $bidang->users()->count() }}
+                                                            Pegawai</span>
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <button type="button"
+                                                            class="btn btn-sm btn-icon btn-text-secondary rounded-pill"
+                                                            wire:click="edit({{ $bidang->id }})" title="Edit">
+                                                            <i class="ki-duotone ki-pencil fs-2">
+                                                                <span class="path1"></span>
+                                                                <span class="path2"></span>
+                                                            </i>
+                                                        </button>
+                                                        <button type="button"
+                                                            class="btn btn-sm btn-icon btn-text-secondary rounded-pill"
+                                                            wire:click="confirmDelete({{ $bidang->id }})"
+                                                            title="Hapus">
+                                                            <i class="ki-duotone ki-trash fs-2">
+                                                                <span class="path1"></span>
+                                                                <span class="path2"></span>
+                                                                <span class="path3"></span>
+                                                                <span class="path4"></span>
+                                                                <span class="path5"></span>
+                                                            </i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="5" class="text-center text-muted">Tidak ada data
+                                                        bidang
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
                                 {{ $bidangs->links() }}
                             </div>
                         </div>

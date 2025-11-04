@@ -51,6 +51,8 @@
                     <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
                         <a href="#" class="d-lg-none">
                             <img alt="Logo" src="{{ asset('/logo.png') }}" class="h-30px" />
+                            {{-- <span class="fw-bold text-primary">{{ auth()->user()->name }}</span> --}}
+
                         </a>
                     </div>
                     <!--end::Mobile logo-->
@@ -68,7 +70,7 @@
                             <div class="menu menu-rounded menu-column menu-lg-row my-5 my-lg-0 align-items-stretch fw-semibold px-2 px-lg-0"
                                 id="kt_app_header_menu" data-kt-menu="true">
                                 <!--begin:Menu item-->
-                                <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
+                                {{-- <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
                                     data-kt-menu-placement="bottom-start"
                                     class="menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2">
                                     <!--begin:Menu link-->
@@ -77,7 +79,7 @@
                                         <span class="menu-arrow d-lg-none"></span>
                                     </span>
                                     <!--end:Menu link-->
-                                </div>
+                                </div> --}}
                                 <!--end:Menu item-->
                             </div>
                             <!--end::Menu-->
@@ -293,11 +295,13 @@
                             <!--end::Notifications-->
                             <!--begin::User menu-->
                             <div class="app-navbar-item ms-1 ms-md-4" id="kt_header_user_menu_toggle">
+                                {{ auth()->user()->name }} &nbsp;&nbsp;&nbsp;
                                 <!--begin::Menu wrapper-->
                                 <div class="cursor-pointer symbol symbol-35px"
                                     data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
                                     data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
-                                    <img src="{{ asset('/logo.png') }}" class="rounded-3" alt="user" />
+                                    <img src="{{ asset('assets/media/avatars/blank.png') }}" class="rounded-3"
+                                        alt="user" />
                                 </div>
                                 <!--begin::User account menu-->
                                 <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px"
@@ -305,11 +309,6 @@
                                     <!--begin::Menu item-->
                                     <div class="menu-item px-3">
                                         <div class="menu-content d-flex align-items-center px-3">
-                                            <!--begin::Avatar-->
-                                            <div class="symbol symbol-50px me-5">
-                                                <img alt="Logo" src="{{ asset('/logo.png') }}" />
-                                            </div>
-                                            <!--end::Avatar-->
                                             <!--begin::Username-->
                                             <div class="d-flex flex-column">
                                                 <div class="fw-bold d-flex align-items-center fs-5">
@@ -426,7 +425,7 @@
                             </div>
                             <!--end::User menu-->
                             <!--begin::Header menu toggle-->
-                            <div class="app-navbar-item d-lg-none ms-2 me-n2" title="Show header menu">
+                            {{-- <div class="app-navbar-item d-lg-none ms-2 me-n2" title="Show header menu">
                                 <div class="btn btn-flex btn-icon btn-active-color-primary w-30px h-30px"
                                     id="kt_app_header_menu_toggle">
                                     <i class="ki-duotone ki-element-4 fs-1">
@@ -434,7 +433,7 @@
                                         <span class="path2"></span>
                                     </i>
                                 </div>
-                            </div>
+                            </div> --}}
                             <!--end::Header menu toggle-->
                             <!--begin::Aside toggle-->
                             <!--end::Header menu toggle-->

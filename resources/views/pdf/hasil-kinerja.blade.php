@@ -237,27 +237,51 @@
             </tr>
             <tr>
                 <td class="label">Target</td>
-                <td>{{ $penilaian->targetKinerja->indikatorKinerja->target }} {{ $penilaian->targetKinerja->satuan }}</td>
+                <td>{{ $penilaian->targetKinerja->indikatorKinerja->target }}
+                    {{ $penilaian->targetKinerja->indikatorKinerja->satuan }}
+                </td>
             </tr>
             <tr>
                 <td class="label">Program/Kegiatan</td>
-                <td>{{ $penilaian->targetKinerja->indikatorKinerja->sasaran_program }}</td>
+                {{-- <td>{{ $penilaian->targetKinerja->indikatorKinerja->sasaran_program }}</td> --}}
+                <td>
+                    <ol>
+                        @foreach ($indikators as $indikator)
+                            <li>&nbsp;&nbsp; {{ $indikator->sasaran_program }}</li>
+                        @endforeach
+                    </ol>
+                </td>
             </tr>
             <tr>
                 <td class="label">Indikator Kinerja Program/Kegiatan</td>
-                <td>{{ $penilaian->targetKinerja->indikatorKinerja->indikator_program }}</td>
+                {{-- <td>{{ $penilaian->targetKinerja->indikatorKinerja->indikator_program }}</td> --}}
+                <td>
+                    <ol>
+                        @foreach ($indikators as $indikator)
+                            <li>&nbsp;&nbsp; {{ $indikator->indikator_program }}</li>
+                        @endforeach
+                    </ol>
+                </td>
             </tr>
             <tr>
                 <td class="label">Target</td>
-                <td>{{ $penilaian->targetKinerja->target }} {{ $penilaian->targetKinerja->satuan }}</td>
+                {{-- <td>{{ $penilaian->targetKinerja->target }} {{ $penilaian->targetKinerja->satuan }}</td>
+                </td> --}}
+                <td>
+                    <ol>
+                        @foreach ($indikators as $indikator)
+                            <li>&nbsp;&nbsp; {{ number_format($indikator->targetKinerjaa->target, 2, '.', '') }}
+                                {{ $indikator->targetKinerjaa->satuan }}</li>
+                        @endforeach
+                    </ol>
                 </td>
             </tr>
         </table>
     </div>
 
     <div class="footer">
-        <!--<p>Dokumen ini dibuat secara otomatis pada {{ now()->format('d F Y H:i:s') }}</p>-->
-        <p>Dokumen ini dibuat secara otomatis pada {{ $penilaian->targetKinerja->realisasiKinerja->first()->verified_at->format('d F Y H:i:s') }}</p>
+        <p>Dokumen ini dibuat secara otomatis pada {{ now()->format('d F Y H:i:s') }}</p>
+        {{-- <p>Dokumen ini dibuat secara otomatis pada {{ $penilaian->created_at->format('d F Y H:i:s') }}</p> --}}
     </div>
 </body>
 

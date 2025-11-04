@@ -114,7 +114,7 @@
                                                     <td>
                                                         <span
                                                             class="badge badge-light-info">{{ number_format($target->target, 2, ',', '.') }}
-                                                            {{ $indikator->satuan }}</span>
+                                                            {{ $target->satuan }}</span>
                                                     </td>
                                                     <td>
                                                         <span
@@ -163,7 +163,20 @@
                                                                 class="btn btn-sm btn-icon btn-text-success rounded-pill"
                                                                 wire:click="showVerifyModal({{ $realisasi->id }})"
                                                                 title="Verifikasi">
-                                                                <i class="ki-duotone ki-check-circle fs-2">
+                                                                <i class="ki-duotone ki-check-circle fs-2 text-success">
+                                                                    <span class="path1"></span>
+                                                                    <span class="path2"></span>
+                                                                </i>
+                                                            </button>
+                                                        @endif
+
+                                                        @if ($realisasi->status == 'verified')
+                                                            <button type="button"
+                                                                class="btn btn-sm btn-icon btn-text-warning rounded-pill"
+                                                                wire:click="showUnverifyModal({{ $realisasi->id }})"
+                                                                title="Unverifikasi">
+                                                                <i
+                                                                    class="ki-duotone ki-arrow-circle-left fs-2 text-danger">
                                                                     <span class="path1"></span>
                                                                     <span class="path2"></span>
                                                                 </i>
@@ -224,6 +237,33 @@
         </div>
     </div>
 
+    <!-- Modal Unverifikasi -->
+    <div wire:ignore.self class="modal fade" id="unverify-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Batalkan Verifikasi Realisasi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="catatan_verifikasi" class="form-label">Catatan Pembatalan Verifikasi</label>
+                        <textarea class="form-control" id="catatan_verifikasi" wire:model="catatan_verifikasi" rows="4"
+                            placeholder="Tambahkan catatan (opsional untuk pembatalan verifikasi)"></textarea>
+                        @error('catatan_verifikasi')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        wire:click="closeModal">Batal</button>
+                    <button type="button" class="btn btn-success" wire:click="unverify">Batalkan Verifikasi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('livewire:initialized', () => {
             Livewire.on('showModal', () => {
@@ -232,6 +272,14 @@
 
             Livewire.on('closeModal', () => {
                 $('#verify-modal').modal('hide');
+            });
+
+            Livewire.on('showModalUnVerify', () => {
+                $('#unverify-modal').modal('show');
+            });
+
+            Livewire.on('closeModalUnVerify', () => {
+                $('#unverify-modal').modal('hide');
             });
 
             // Initialize tooltips

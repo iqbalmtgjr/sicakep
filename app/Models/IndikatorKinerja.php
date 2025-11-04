@@ -39,7 +39,12 @@ class IndikatorKinerja extends Model
     {
         return $this->hasMany(TargetKinerja::class);
     }
-    
+
+    public function targetKinerjaa()
+    {
+        return $this->hasOne(TargetKinerja::class);
+    }
+
     public function sasaranStrategis()
     {
         return $this->belongsTo(SasaranStrategis::class);

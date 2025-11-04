@@ -98,24 +98,47 @@
                                         <thead>
                                             <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
                                                 <th>No</th>
+                                                <th class="text-end">Aksi</th>
                                                 <th>Nama</th>
                                                 <th>NIP</th>
                                                 <th>Email</th>
-                                                <th>Role</th>
+                                                {{-- <th>Role Utama</th> --}}
+                                                <th>Role Tambahan</th>
                                                 <th>Level Jabatan</th> <!-- TAMBAHAN -->
                                                 <th>Atasan Langsung</th> <!-- TAMBAHAN -->
                                                 <th>Pangkat/Golongan</th>
                                                 <th>Jabatan</th>
-                                                <th>Jabatans</th>
+                                                {{-- <th>Jabatans</th> --}}
                                                 <th>Bidang</th>
-                                                <th>Bidangs</th>
-                                                <th class="text-end">Aksi</th>
+                                                {{-- <th>Bidangs</th> --}}
                                             </tr>
                                         </thead>
                                         <tbody class="text-gray-600 fw-semibold">
                                             @forelse($users as $index => $user)
                                                 <tr>
                                                     <td>{{ $users->firstItem() + $loop->index }}</td>
+                                                    <td class="text-end">
+                                                        <button type="button"
+                                                            class="btn btn-sm btn-icon btn-text-secondary rounded-pill"
+                                                            wire:click="edit({{ $user->id }})" title="Edit">
+                                                            <i class="ki-duotone ki-pencil fs-2">
+                                                                <span class="path1"></span>
+                                                                <span class="path2"></span>
+                                                            </i>
+                                                        </button>
+                                                        <button type="button"
+                                                            class="btn btn-sm btn-icon btn-text-secondary rounded-pill"
+                                                            wire:click="confirmDelete({{ $user->id }})"
+                                                            title="Hapus">
+                                                            <i class="ki-duotone ki-trash fs-2">
+                                                                <span class="path1"></span>
+                                                                <span class="path2"></span>
+                                                                <span class="path3"></span>
+                                                                <span class="path4"></span>
+                                                                <span class="path5"></span>
+                                                            </i>
+                                                        </button>
+                                                    </td>
                                                     <td>
                                                         <div class="d-flex align-items-center">
                                                             <div
@@ -133,7 +156,7 @@
                                                     </td>
                                                     <td>{{ $user->nip }}</td>
                                                     <td>{{ $user->email }}</td>
-                                                    <td>
+                                                    {{-- <td>
                                                         @php
                                                             $roleColors = [
                                                                 'admin' => 'danger',
@@ -144,6 +167,25 @@
                                                         <span
                                                             class="badge badge-light-{{ $roleColors[$user->role] ?? 'secondary' }}">
                                                             {{ ucfirst($user->role) }}</span>
+                                                    </td> --}}
+                                                    <td>
+                                                        @php
+                                                            $roleColors = [
+                                                                'admin' => 'danger',
+                                                                'atasan' => 'warning',
+                                                                'pegawai' => 'info',
+                                                            ];
+                                                        @endphp
+                                                        @if ($user->roles && count($user->roles) > 0)
+                                                            @foreach ($user->roles as $role)
+                                                                <span
+                                                                    class="badge badge-light-{{ $roleColors[$role] ?? 'secondary' }} me-1">
+                                                                    {{ ucfirst($role) }}
+                                                                </span>
+                                                            @endforeach
+                                                        @else
+                                                            <span class="text-muted">-</span>
+                                                        @endif
                                                     </td>
                                                     <td>
                                                         @if ($user->level_jabatan)
@@ -171,7 +213,7 @@
                                                         @endif
                                                     </td>
                                                     <td>{{ $user->pangkat_golongan ?? '-' }}</td>
-                                                    <td>{{ $user->jabatan ?? '-' }}</td>
+                                                    {{-- <td>{{ $user->jabatan ?? '-' }}</td> --}}
                                                     <td>
                                                         @if ($user->jabatans->count() > 0)
                                                             @foreach ($user->jabatans as $jabatan)
@@ -182,7 +224,7 @@
                                                             <span class="text-muted">-</span>
                                                         @endif
                                                     </td>
-                                                    <td>{{ $user->bidang->nama_bidang ?? '-' }}</td>
+                                                    {{-- <td>{{ $user->bidang->nama_bidang ?? '-' }}</td> --}}
                                                     <td>
                                                         @if ($user->bidangs->count() > 0)
                                                             @foreach ($user->bidangs as $bidang)
@@ -193,32 +235,11 @@
                                                             <span class="text-muted">-</span>
                                                         @endif
                                                     </td>
-                                                    <td class="text-end">
-                                                        <button type="button"
-                                                            class="btn btn-sm btn-icon btn-text-secondary rounded-pill"
-                                                            wire:click="edit({{ $user->id }})" title="Edit">
-                                                            <i class="ki-duotone ki-pencil fs-2">
-                                                                <span class="path1"></span>
-                                                                <span class="path2"></span>
-                                                            </i>
-                                                        </button>
-                                                        <button type="button"
-                                                            class="btn btn-sm btn-icon btn-text-secondary rounded-pill"
-                                                            wire:click="confirmDelete({{ $user->id }})"
-                                                            title="Hapus">
-                                                            <i class="ki-duotone ki-trash fs-2">
-                                                                <span class="path1"></span>
-                                                                <span class="path2"></span>
-                                                                <span class="path3"></span>
-                                                                <span class="path4"></span>
-                                                                <span class="path5"></span>
-                                                            </i>
-                                                        </button>
-                                                    </td>
+
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="12" class="text-center text-muted">Tidak ada data
+                                                    <td colspan="13" class="text-center text-muted">Tidak ada data
                                                         pengguna</td>
                                                 </tr>
                                             @endforelse
@@ -273,7 +294,7 @@
                                 @enderror
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="role" class="form-label">Role</label>
+                                <label for="role" class="form-label">Role Utama</label>
                                 <select class="form-select" id="role" wire:model="role" required>
                                     <option value="admin">Admin</option>
                                     <option value="atasan">Atasan</option>
@@ -282,6 +303,18 @@
                                 @error('role')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="roles" class="form-label">Role Tambahan (Multiple)</label>
+                                <select class="form-select" id="roles" wire:model="roles" multiple>
+                                    <option value="admin">Admin</option>
+                                    <option value="atasan">Atasan</option>
+                                    <option value="pegawai">Pegawai</option>
+                                </select>
+                                @error('roles')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <small class="text-muted">Pilih role tambahan jika user memiliki multiple role</small>
                             </div>
                             <div class="row">
                                 <div class="col-md-6 mb-3">

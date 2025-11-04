@@ -41,76 +41,83 @@
                             </div>
 
                             <div class="card-body py-4">
-                                <table class="table align-middle table-row-dashed fs-6 gy-5">
-                                    <thead>
-                                        <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-                                            <th>Nama Periode</th>
-                                            <th>Tahun</th>
-                                            <th>Jenis</th>
-                                            <th>Tanggal Mulai</th>
-                                            <th>Tanggal Selesai</th>
-                                            <th>Status</th>
-                                            <th class="text-end">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="text-gray-600 fw-semibold">
-                                        @forelse($periodes as $periode)
-                                            <tr>
-                                                <td>
-                                                    <span
-                                                        class="text-gray-800 fw-bold">{{ $periode->nama_periode }}</span>
-                                                </td>
-                                                <td>
-                                                    <span class="badge badge-light-primary">{{ $periode->tahun }}</span>
-                                                </td>
-                                                <td>
-                                                    <span class="badge badge-light-info">{{ $periode->jenis }}</span>
-                                                </td>
-                                                <td>{{ $periode->tanggal_mulai->format('d/m/Y') }}</td>
-                                                <td>{{ $periode->tanggal_selesai->format('d/m/Y') }}</td>
-                                                <td>
-                                                    <div class="form-check form-switch">
-                                                        <input class="form-check-input" type="checkbox"
-                                                            wire:click="toggleStatus({{ $periode->id }})"
-                                                            {{ $periode->is_active ? 'checked' : '' }}>
-                                                        <label class="form-check-label">
-                                                            <span
-                                                                class="badge badge-light-{{ $periode->is_active ? 'success' : 'danger' }}">
-                                                                {{ $periode->is_active ? 'Aktif' : 'Nonaktif' }}
-                                                            </span>
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td class="text-end">
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-icon btn-text-secondary rounded-pill"
-                                                        wire:click="edit({{ $periode->id }})" title="Edit">
-                                                        <i class="ki-duotone ki-pencil fs-2">
-                                                            <span class="path1"></span>
-                                                            <span class="path2"></span>
-                                                        </i>
-                                                    </button>
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-icon btn-text-secondary rounded-pill"
-                                                        wire:click="confirmDelete({{ $periode->id }})" title="Hapus">
-                                                        <i class="ki-duotone ki-trash fs-2">
-                                                            <span class="path1"></span>
-                                                            <span class="path2"></span>
-                                                            <span class="path3"></span>
-                                                            <span class="path4"></span>
-                                                            <span class="path5"></span>
-                                                        </i>
-                                                    </button>
-                                                </td>
+                                <div class="table-responsive">
+                                    <table class="table align-middle table-row-dashed fs-6 gy-5">
+                                        <thead>
+                                            <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+                                                <th>Nama Periode</th>
+                                                <th>Tahun</th>
+                                                <th>Jenis</th>
+                                                <th>Tanggal Mulai</th>
+                                                <th>Tanggal Selesai</th>
+                                                <th>Status</th>
+                                                <th class="text-end">Aksi</th>
                                             </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="7" class="text-center text-muted">Tidak ada data periode
-                                                </td>
-                                            </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody class="text-gray-600 fw-semibold">
+                                            @forelse($periodes as $periode)
+                                                <tr>
+                                                    <td>
+                                                        <span
+                                                            class="text-gray-800 fw-bold">{{ $periode->nama_periode }}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span
+                                                            class="badge badge-light-primary">{{ $periode->tahun }}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span
+                                                            class="badge badge-light-info">{{ $periode->jenis }}</span>
+                                                    </td>
+                                                    <td>{{ $periode->tanggal_mulai->format('d/m/Y') }}</td>
+                                                    <td>{{ $periode->tanggal_selesai->format('d/m/Y') }}</td>
+                                                    <td>
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                wire:click="toggleStatus({{ $periode->id }})"
+                                                                {{ $periode->is_active ? 'checked' : '' }}>
+                                                            <label class="form-check-label">
+                                                                <span
+                                                                    class="badge badge-light-{{ $periode->is_active ? 'success' : 'danger' }}">
+                                                                    {{ $periode->is_active ? 'Aktif' : 'Nonaktif' }}
+                                                                </span>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <button type="button"
+                                                            class="btn btn-sm btn-icon btn-text-secondary rounded-pill"
+                                                            wire:click="edit({{ $periode->id }})" title="Edit">
+                                                            <i class="ki-duotone ki-pencil fs-2">
+                                                                <span class="path1"></span>
+                                                                <span class="path2"></span>
+                                                            </i>
+                                                        </button>
+                                                        <button type="button"
+                                                            class="btn btn-sm btn-icon btn-text-secondary rounded-pill"
+                                                            wire:click="confirmDelete({{ $periode->id }})"
+                                                            title="Hapus">
+                                                            <i class="ki-duotone ki-trash fs-2">
+                                                                <span class="path1"></span>
+                                                                <span class="path2"></span>
+                                                                <span class="path3"></span>
+                                                                <span class="path4"></span>
+                                                                <span class="path5"></span>
+                                                            </i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="7" class="text-center text-muted">Tidak ada data
+                                                        periode
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
+
                                 {{ $periodes->links() }}
                             </div>
                         </div>

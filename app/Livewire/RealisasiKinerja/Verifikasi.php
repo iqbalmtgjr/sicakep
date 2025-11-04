@@ -125,37 +125,6 @@ class Verifikasi extends Component
         $this->dispatch('showModal');
     }
 
-    // public function verify()
-    // {
-    //     $realisasi = RealisasiKinerja::findOrFail($this->realisasiId);
-
-    //     $realisasi->update([
-    //         'status' => 'verified',
-    //         'verified_by' => auth()->id(),
-    //         'verified_at' => now(),
-    //         'catatan_verifikasi' => $this->catatan_verifikasi,
-    //     ]);
-
-    //     // Buat notifikasi untuk user yang mengajukan realisasi
-    //     Notifikasi::create([
-    //         'user_id' => $realisasi->user_id,
-    //         'judul' => 'Realisasi Kinerja Diterima',
-    //         'pesan' => json_encode([
-    //             'status' => 'verified',
-    //             'indikator' => $realisasi->targetKinerja->indikatorKinerja->nama_indikator,
-    //             'realisasi' => $realisasi->realisasi,
-    //             'tanggal' => $realisasi->tanggal_realisasi->format('d F Y'),
-    //             'verifikator' => auth()->user()->name,
-    //             'catatan' => $this->catatan_verifikasi ?: null,
-    //         ]),
-    //         'tipe' => 'verifikasi',
-    //         'is_read' => false,
-    //     ]);
-
-    //     flash('Realisasi berhasil diverifikasi.', 'success', [], 'Berhasil');
-    //     $this->closeModal();
-    // }
-
     public function reject()
     {
         if (empty($this->catatan_verifikasi)) {
@@ -199,5 +168,59 @@ class Verifikasi extends Component
         $this->catatan_verifikasi = '';
         $this->resetValidation();
         $this->dispatch('closeModal');
+    }
+
+    public function unverify()
+    {
+        $realisasi = RealisasiKinerja::findOrFail($this->realisasiId);
+
+        // VALIDASI: Hanya atasan langsung atau kepala dinas yang bisa verifikasi
+        if (!auth()->user()->canAssess($realisasi->user_id)) {
+            flash('Anda tidak memiliki hak untuk memverifikasi realisasi ini.', 'error', [], 'Gagal');
+            $this->closeModal();
+            return;
+        }
+
+        $realisasi->update([
+            'status' => 'submitted',
+            'verified_by' => auth()->id(),
+            'verified_at' => now(),
+            'catatan_verifikasi' => $this->catatan_verifikasi,
+        ]);
+
+        Notifikasi::create([
+            'user_id' => $realisasi->user_id,
+            'judul' => 'Verifikasi Realisasi Dibatalkan',
+            'pesan' => json_encode([
+                'status' => 'verified',
+                'indikator' => $realisasi->targetKinerja->indikatorKinerja->nama_indikator,
+                'realisasi' => $realisasi->realisasi,
+                'tanggal' => $realisasi->tanggal_realisasi->format('d F Y'),
+                'verifikator' => auth()->user()->name,
+                'catatan' => $this->catatan_verifikasi ?: null,
+            ]),
+            'tipe' => 'unverifikasi',
+            'is_read' => false,
+        ]);
+
+        flash('Realisasi berhasil di unverifikasi.', 'success', [], 'Berhasil');
+        $this->closeModal();
+    }
+
+    public function showUnverifyModal($id)
+    {
+        $this->realisasiId = $id;
+        $this->catatan_verifikasi = '';
+        $this->showModal = true;
+        $this->dispatch('showModalUnVerify');
+    }
+
+    public function closeModalUnverify()
+    {
+        $this->showModal = false;
+        $this->realisasiId = null;
+        $this->catatan_verifikasi = '';
+        $this->resetValidation();
+        $this->dispatch('closeModalUnVerify');
     }
 }

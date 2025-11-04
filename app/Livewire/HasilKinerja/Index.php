@@ -4,6 +4,7 @@ namespace App\Livewire\HasilKinerja;
 
 use Livewire\Component;
 use App\Models\Hasilkinerja;
+use App\Models\IndikatorKinerja;
 use Livewire\WithPagination;
 use App\Models\RealisasiKinerja;
 use App\Models\PenilaianKategori;
@@ -40,6 +41,7 @@ class Index extends Component
     public function exportPdf($id)
     {
         $penilaian = PenilaianKinerja::with(['user', 'periode', 'penilai'])->findOrFail($id);
+        // dd($penilaian);
 
         // Check if user has permission to view this penilaian
         $user = auth()->user();
@@ -53,12 +55,16 @@ class Index extends Component
 
         $nilai = $penilaian->nilai_kinerja ?? 0;
         $kategoriData = $this->getPesanPenilaian($nilai);
+        $indikators = IndikatorKinerja::where('user_id', $penilaian->user_id)->get();
 
         $data = [
             'penilaian' => $penilaian,
             'nilai' => $nilai,
             'kategoriData' => $kategoriData,
+            'indikators' => $indikators,
         ];
+
+        // dd($data['penilaian']);
 
         $pdf = Pdf::loadView('pdf.hasil-kinerja', $data);
 
