@@ -24,8 +24,8 @@ class Index extends Component
     // public $nama_indikator;
     public $sasaran_program;
     public $indikator_program;
-    public $satuan;
-    public $target;
+    // public $satuan;
+    // public $target;
     // public $bobot;
     public $deskripsi;
     public $is_active = true;
@@ -37,8 +37,8 @@ class Index extends Component
         // 'nama_indikator' => 'required|string',
         'sasaran_program' => 'required|string|max:255',
         'indikator_program' => 'required|string',
-        'satuan' => 'required|string|max:50',
-        'target' => 'required|numeric|min:0',
+        // 'satuan' => 'required|string|max:50',
+        // 'target' => 'required|numeric|min:0',
         // 'bobot' => 'required|numeric|min:0|max:100',
         'deskripsi' => 'nullable|string',
         'is_active' => 'boolean',
@@ -52,8 +52,8 @@ class Index extends Component
         'nama_indikator.required' => 'Nama indikator wajib diisi.',
         'sasaran_program.required' => 'Sasaran program wajib diisi.',
         'indikator_program.required' => 'Indikator program wajib diisi.',
-        'satuan.required' => 'Satuan wajib diisi.',
-        'target.required' => 'Target wajib diisi.',
+        // 'satuan.required' => 'Satuan wajib diisi.',
+        // 'target.required' => 'Target wajib diisi.',
         // 'bobot.required' => 'Bobot wajib diisi.',
         // 'bobot.max' => 'Bobot maksimal 100.',
     ];
@@ -107,8 +107,8 @@ class Index extends Component
         // $this->nama_indikator = $indikator->nama_indikator;
         $this->sasaran_program = $indikator->sasaran_program;
         $this->indikator_program = $indikator->indikator_program;
-        $this->satuan = $indikator->satuan;
-        $this->target = $indikator->target;
+        // $this->satuan = $indikator->satuan;
+        // $this->target = $indikator->target;
         // $this->bobot = $indikator->bobot;
         $this->deskripsi = $indikator->deskripsi;
         $this->is_active = $indikator->is_active;
@@ -136,8 +136,8 @@ class Index extends Component
                 // 'nama_indikator' => 'required|string',
                 'sasaran_program' => 'required|string|max:255',
                 'indikator_program' => 'required|string',
-                'satuan' => 'required|string|max:50',
-                'target' => 'required|numeric|min:0',
+                // 'satuan' => 'required|string|max:50',
+                // 'target' => 'required|numeric|min:0',
                 // 'bobot' => 'required|numeric|min:0|max:100',
                 'deskripsi' => 'nullable|string',
                 'is_active' => 'boolean',
@@ -150,8 +150,8 @@ class Index extends Component
                 // 'nama_indikator' => $this->nama_indikator,
                 'sasaran_program' => $this->sasaran_program,
                 'indikator_program' => $this->indikator_program,
-                'satuan' => $this->satuan,
-                'target' => $this->target,
+                // 'satuan' => $this->satuan,
+                // 'target' => $this->target,
                 // 'bobot' => $this->bobot,
                 'deskripsi' => $this->deskripsi,
                 'is_active' => $this->is_active,
@@ -163,6 +163,7 @@ class Index extends Component
             //     $this->addError('kode_indikator', 'Kode indikator sudah digunakan.');
             //     return;
             // }
+            // dd($this->satuan);
 
             $this->validate();
 
@@ -173,8 +174,8 @@ class Index extends Component
                 // 'nama_indikator' => $this->nama_indikator,
                 'sasaran_program' => $this->sasaran_program,
                 'indikator_program' => $this->indikator_program,
-                'satuan' => $this->satuan,
-                'target' => $this->target,
+                // 'satuan' => $this->satuan,
+                // 'target' => $this->target,
                 'deskripsi' => $this->deskripsi,
                 'is_active' => $this->is_active,
                 // 'bobot' => $this->bobot,
@@ -231,8 +232,8 @@ class Index extends Component
         // $this->nama_indikator = '';
         $this->sasaran_program = '';
         $this->indikator_program = '';
-        $this->satuan = '';
-        $this->target = '';
+        // $this->satuan = '';
+        // $this->target = '';
         // $this->bobot = '';
         $this->deskripsi = '';
         $this->is_active = true;

@@ -8,7 +8,7 @@
         <div class="app-sidebar-logo px-6" style="justify-content: center !important" id="kt_app_sidebar_logo">
             <!--begin::Logo image-->
             <a href="{{ route('home') }}">
-                <img alt="Logo Default" src="{{ asset('/sicakep.png') }}"
+                <img alt="Logo" src="{{ asset('sicakep.png') }}"
                     class="mt-8 h-70px app-sidebar-logo-default" />
                 <img alt="Logo" src="{{ asset('/logo.png') }}" class="h-35px app-sidebar-logo-minimize" />
             </a>

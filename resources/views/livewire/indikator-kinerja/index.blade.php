@@ -54,9 +54,9 @@
                                         <thead>
                                             <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
                                                 <th>Sasaran Strategis</th>
-                                                <th>Nama Indikator</th>
+                                                <th>Sasaran Program</th>
                                                 <th>Pegawai</th>
-                                                <th>Target</th>
+                                                {{-- <th>Target</th> --}}
                                                 {{-- <th>Bobot</th> --}}
                                                 <th>Status</th>
                                                 <th class="text-end">Aksi</th>
@@ -72,7 +72,7 @@
                                                     <td>
                                                         <div class="d-flex flex-column">
                                                             <span
-                                                                class="text-gray-800 fw-bold mb-1">{{ $indikator->nama_indikator }}</span>
+                                                                class="text-gray-800 fw-bold mb-1">{{ $indikator->sasaran_program }}</span>
                                                             @if ($indikator->deskripsi)
                                                                 <span
                                                                     class="text-muted fs-7">{{ Str::limit($indikator->deskripsi, 50) }}</span>
@@ -95,11 +95,11 @@
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td>
+                                                    {{-- <td>
                                                         <span
                                                             class="badge badge-light-success">{{ number_format($indikator->target, 2, ',', '.') }}
                                                             {{ $indikator->satuan }}</span>
-                                                    </td>
+                                                    </td> --}}
                                                     {{-- <td>
                                                     <span
                                                         class="badge badge-light-warning">{{ $indikator->bobot }}%</span>

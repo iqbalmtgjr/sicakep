@@ -219,7 +219,7 @@
                                     <option value="">Pilih Indikator</option>
                                     @foreach ($indikators as $indikator)
                                         <option value="{{ $indikator->id }}">
-                                            {{ $indikator->kode_indikator }} - {{ $indikator->indikator_program }}
+                                            {{ $indikator->indikator_program }}
                                         </option>
                                     @endforeach
                                 </select>
